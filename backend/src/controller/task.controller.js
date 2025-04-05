@@ -1,7 +1,7 @@
 import { isValidObjectId } from "mongoose";
 import { Task } from "../modelSchema/task.model.js";
 import { Worker } from "../modelSchema/worker.model.js";
-
+import { mailer } from "../../utils/mail.js";
 
 const createTask = async (req,res) => {
 
@@ -135,75 +135,73 @@ const getTaskById = async (req, res) => {
 };
   
 
-const updateTaskbyId = async(req,res) =>{
-
+const updateTaskById = async (req, res) => {
     try {
-        const {taskId} = req.params
-        const { tittle, description, assignedTo, dueDate } = req.body;
-    
-    
-        if(!isValidObjectId(taskId)){
-            return res
-            .status(400)
-            .json({message: "Invalid task id"})
+      const { taskId } = req.params;
+      const { tittle, description, assignedTo, dueDate } = req.body;
+  
+      if (!isValidObjectId(taskId)) {
+        return res.status(400).json({ message: "Invalid Task ID" });
+      }
+  
+
+      const task = await Task.findById(taskId);
+      if (!task) {
+        return res.status(404).json({ message: "No task found with this ID." });
+      }
+  
+      let reassigned = false;
+      let newAssignee = null;
+  
+
+      if (assignedTo && assignedTo !== task.assignedTo?.toString()) {
+        if (!isValidObjectId(assignedTo)) {
+          return res.status(400).json({ message: "Invalid worker ID" });
         }
-
-        const task = await Task.findById(taskId)
-    
-        if(!task){
-            return res
-            .status(404)
-            .json(
-                {
-                    message: "Task not found"
-                }
-            )
+  
+        newAssignee = await Worker.findById(assignedTo);
+        if (!newAssignee) {
+          return res.status(404).json({ message: "Worker not found to assign task" });
         }
+  
+        task.assignedTo = assignedTo;
+        reassigned = true;
+      }
+  
 
-        if(assignedTo){
-            const user = await Worker.findById(assignedTo)
-            if(!user){
-                return res
-                .status(404)
-                .json({message: "Worker not found for assign task to update"})
-            }
-        }
+      if (tittle !== undefined) task.tittle = tittle;
+      if (description !== undefined) task.description = description;
+      if (dueDate !== undefined) task.dueDate = dueDate;
+  
 
-        task.tittle = tittle 
-        task.description = description
-        task.assignedTo = assignedTo
-        task.dueDate = dueDate
+      await task.save();
+  
 
-        await task.save()
-
-
-        return res
-        .status(200)
-        .json(
-            {
-                message: "Task updated successfully",
-                task :  task
-            }
-        )
-
-
+      if (reassigned && newAssignee?.email) {
+        const subject = "You have been assigned a new task";
+        const text = `Hello ${newAssignee.username},\n\nYou have been assigned a new task:\n\nTitle: ${task.tittle}\nDescription: ${task.description}\nDue Date: ${new Date(task.dueDate).toDateString()}\n\nPlease log in to your dashboard to view the details.\n\nThanks,\nTask Manager Admin`;
+        
+        await mailer({
+          to: newAssignee.email,
+          subject,
+          text,
+        });
+      }
+  
+      return res.status(200).json({
+        message: reassigned
+          ? `Task updated and assigned to ${newAssignee.username}`
+          : "Task updated successfully",
+        task,
+      });
     } catch (error) {
-        res
-        .status(500)
-        .json(
-            {
-                message: "Internal Server Error",
-                status :500,
-                error:error.message
-
-            }
-        )
+      return res.status(500).json({
+        message: "Internal Server Error",
+        status: 500,
+        error: error.message,
+      });
     }
-
-
-
-
-}
+  };
 
 
 const updateTaskStatus = async (req,res) => {
@@ -329,7 +327,7 @@ export {
     createTask,
     getAllTasks,
     getTaskById,
-    updateTaskbyId,
+    updateTaskById,
     updateTaskStatus,
     deleteTask
 

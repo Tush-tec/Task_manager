@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createTask, deleteTask, getAllTasks, getTaskById, updateTaskbyId, updateTaskStatus } from "../controller/task.controller.js";
+import { createTask, deleteTask, getAllTasks, getTaskById, updateTaskById, updateTaskStatus } from "../controller/task.controller.js";
 import { authenticateMiddle, isAdmin,  } from "../middleware/auth.middleware.js";
 
 
@@ -22,7 +22,7 @@ router.route("/get-task/:taskId").get(
 
 router.route("/update-task/:taskId").patch(
     authenticateMiddle,
-    updateTaskbyId
+    updateTaskById
 )
 
 router.route("/update-task-status/:taskId").patch(
