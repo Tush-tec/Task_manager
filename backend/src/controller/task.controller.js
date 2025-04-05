@@ -186,6 +186,9 @@ const updateTaskById = async (req, res) => {
           subject,
           text,
         });
+
+        console.log(` Email sent to ${newAssignee.email}`);
+        
       }
   
       return res.status(200).json({
@@ -204,71 +207,74 @@ const updateTaskById = async (req, res) => {
   };
 
 
-const updateTaskStatus = async (req,res) => {
+
+  const updateTaskStatus = async (req, res) => {
     try {
-        const {taskId } = req.params
-        const {status} = req.body
-        const user = req.user._id
+      const { taskId } = req.params;
+      const { status } = req.body;
+      const user = req.user._id;
+  
 
-        if(!isValidObjectId(taskId)){
-            return res
-            .status(400)
-            .json(
-                {
-                    message: "Invalid task id",
-                    status :400,
-                }
-            )   
-        }
+  
+      if (!isValidObjectId(taskId)) {
+        return res.status(400).json({
+          message: "Invalid task ID",
+          status: 400,
+        });
+      }
+  
 
-        const task = await Task.findById(taskId)
+      const task = await Task.findById(taskId);
+      if (!task) {
+        return res.status(404).json({
+          message: "Task not found",
+          status: 404,
+        });
+      }
+  
 
-        if(!task){
-            return res
-            .status(404)
-            .json(
-                {
-                    message: "Task not found",
-                    status :404,
-                }
-            )
-        }
+      if (task.assignedTo.toString() == user.toString()) {
+        return res.status(403).json({
+          message: "You are not authorized to update this task",
+          status: 403,
+        });
+      }
+  
 
-        if(task.assignedTo.toString() !== user.toString()){
-            return res
-            .status(403)
-            .json(
-                {
-                    message: "You are not authorized to update this task",
-                    status :403,
-                }
-            )
-        }
+      if (task.status.toLowerCase() === "done") {
+        return res.status(400).json({
+          message: "Task is already marked as done and cannot be updated",
+          status: 400,
+        });
+      }
+  
 
-        task.status = status
-        await task.save()
+      if (!status || typeof status !== "string" || !status.includes(status.toLowerCase())) {
+        return res.status(400).json({
+          message: `Invalid status. Allowed values: ${validStatuses.join(", ")}`,
+          status: 400,
+        });
+      }
+  
 
-        return res 
-        .status(200)
-        .json(
-            {
-                message: "Task status updated successfully",
-                status :200,
-            }
-        )
-        
+      task.status = status.toLowerCase();
+      await task.save();
+  
+      return res.status(200).json({
+        message: "Task status updated successfully",
+        status: 200,
+        updatedStatus: task.status,
+      });
+  
     } catch (error) {
-        return res
-        .status(500)
-        .json(
-            {
-                message: "Internal server error",
-                status :500,
-                error : error.message
-            }
-        )    
+      return res.status(500).json({
+        message: "Internal server error",
+        status: 500,
+        error: error.message,
+      });
     }
-}
+  };
+  
 
 const deleteTask = async(req,res) =>{ 
 
