@@ -30,7 +30,7 @@ router.route("/update-task-status/:taskId").patch(
     updateTaskStatus
 )
 
-router.route("/delete-task").delete(
+router.route("/delete-task/:taskId").delete(
     authenticateMiddle,
     deleteTask
 )

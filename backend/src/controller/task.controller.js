@@ -104,48 +104,42 @@ const getTask = async (req,res) =>{
 
 }
 
-const getTaskById = async (req,res) => {
-   try {
-     const {taskId} = req.params
- 
-     if(!isValidObjectId(taskId)){
-         return res
-         .status(400)
-         .json({message: "Invalid task id"})
- 
-     }
- 
-     const task = await Task.findById(taskId).populate(
-         "assignedTo",
-         "username email"
- 
-     )
- 
- 
-     if(!task){
-         return res
-         .status(404)
-         .json({message: "Task not found"})
-         
-     }
-   } catch (error) {
-        return res
-        .status(500)
-        .json(
-            {
-                message: "Failed to retrieve task",
-                status :500,
-                error: error.message
-            }
-        )
-   }
-}
+const getTaskById = async (req, res) => {
+    try {
+      const { taskId } = req.params;
+  
+      if (!isValidObjectId(taskId)) {
+        return res.status(400).json({ message: "Invalid task ID" });
+      }
+  
+      const task = await Task.findById(taskId).populate({
+        path: "assignedTo",
+        select: "username email",
+      });
+  
+      if (!task) {
+        return res.status(404).json({ message: "No task assigned yet. You're all caught up!" });
+      }
+  
+      return res.status(200).json({
+        message: `Task assigned to user ${task.assignedTo?.username || "Unknown"}`,
+        taskCount: 1,
+        task: [task], 
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Failed to retrieve task",
+        error: error.message,
+      });
+    }
+};
+  
 
 const updateTaskbyId = async(req,res) =>{
 
     try {
         const {taskId} = req.params
-        const { title, description, assignedTo, dueDate } = req.body;
+        const { tittle, description, assignedTo, dueDate } = req.body;
     
     
         if(!isValidObjectId(taskId)){
@@ -166,8 +160,8 @@ const updateTaskbyId = async(req,res) =>{
             )
         }
 
-        if(assignesTo){
-            const user = await Worker.findById(assignesTo)
+        if(assignedTo){
+            const user = await Worker.findById(assignedTo)
             if(!user){
                 return res
                 .status(404)
@@ -175,7 +169,7 @@ const updateTaskbyId = async(req,res) =>{
             }
         }
 
-        task.title = title 
+        task.tittle = tittle 
         task.description = description
         task.assignedTo = assignedTo
         task.dueDate = dueDate
@@ -292,11 +286,12 @@ const deleteTask = async(req,res) =>{
              }
          )
      }
+     
  
      const task = await Task.findByIdAndDelete(
          taskId
      )
- 
+     
      if(!task){
          return res
          .status(500)
@@ -306,6 +301,16 @@ const deleteTask = async(req,res) =>{
              }
          )
      }
+
+     return res
+     .status(200)
+     .json(
+        {
+            message: "Task is deleted successfully",
+            status :200
+            
+        }
+     )
    } catch (error) {
         return res
         .status(500)
