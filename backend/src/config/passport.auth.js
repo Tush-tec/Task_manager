@@ -20,7 +20,7 @@ passport.use(
         if (!user) {
           user = await Worker.create({
             googleId: profile.id,
-            name: profile.displayName,
+            username: profile.displayName,
             email: profile.emails[0].value,
             picture: profile.photos[0].value,
           });
@@ -46,7 +46,7 @@ passport.use(
           refreshToken: refreshTokenJWT,
           user: {
             _id: user._id,
-            name: user.name,
+            username: user.username,
             email: user.email,
             picture: user.picture,
             role: user.role

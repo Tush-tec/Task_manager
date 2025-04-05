@@ -8,7 +8,7 @@ const workerSchema = new Schema (
             type : String,
             unique: true
         },
-        name : {
+        username : {
             type : String,
             required : true
         },

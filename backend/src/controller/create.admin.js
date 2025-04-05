@@ -31,10 +31,10 @@ const genrateAccessOrRefreshToken = async(adminId) => {
 
 const createAdmin = async (req,res) => {
    try {
-     const {name, email, password, role} = req.body
+     const {username, email, password, role} = req.body
  
  
-     if(!name || !email || ! password || !role) {
+     if(!username || !email || ! password || !role) {
          return res.status(401).json(
              {
                  "message": "Please fill all the fields",
@@ -66,7 +66,7 @@ const createAdmin = async (req,res) => {
  
      const admin = await Worker.create(
          {
-             name,
+            username,
              email,
              password :hashPassword,
              role
@@ -184,7 +184,7 @@ const logout = async (req, res) => {
         .clearCookie("accessToken", options)
         .clearCookie("refreshToken", options)
         .json({
-          message: `${worker.name} (${worker.email}) logged out successfully`,
+          message: `${worker.username} (${worker.email}) logged out successfully`,
           status: 200,
         });
     } catch (error) {
@@ -223,7 +223,7 @@ const toggleWorkerRole = async(req,res) => {
         .status(201)
         .json(
             {
-                message: `Role of worker ${worker.name} changed successfully`,
+                message: `Role of worker ${worker.username} changed successfully`,
                 status: 201
                 
             }
@@ -290,7 +290,7 @@ const deleteSubAdmin = async (req, res) => {
       }
   
       if (worker.role !== "subAdmin") {
-        return res.status(400).json({ message: `the requested worker, ${worker.name}, is not a sub-admin` });
+        return res.status(400).json({ message: `the requested worker, ${worker.username}, is not a sub-admin` });
 
         }
 
@@ -299,7 +299,7 @@ const deleteSubAdmin = async (req, res) => {
   
       
   
-      return res.status(200).json({ message: `Subadmin deleted successfully ${worker.name}` });
+      return res.status(200).json({ message: `Subadmin deleted successfully ${worker.username}` });
 
     } catch (error) {
       console.error(error);

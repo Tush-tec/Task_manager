@@ -22,6 +22,8 @@ const createTask = async (req,res) => {
             .json({message: "Assigned user not found"})
         }
 
+        
+
 
     
         const task = await Task.create(
@@ -44,7 +46,7 @@ const createTask = async (req,res) => {
         .status(200)
         .json(
             {
-                message : "Task is Created",
+                message : `Task is Created & given to ${assignedUser.username}`,
                 status :200,
                 task : task
             }
@@ -66,7 +68,7 @@ const createTask = async (req,res) => {
 
 const getAllTasks = async (req,res) => {
     try {
-        const task =  await Task.find().populate("assignedTo", "name email")
+        const task =  await Task.find().populate("assignedTo", "username email")
         if(!task){
             return res
             .status(404)
@@ -115,7 +117,7 @@ const getTaskById = async (req,res) => {
  
      const task = await Task.findById(taskId).populate(
          "assignedTo",
-         "name email"
+         "username email"
  
      )
  
