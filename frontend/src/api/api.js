@@ -36,7 +36,9 @@ const workerLogout = () => {
 
 
 const registerWorker = (data) => {
-    return apiClient.post(`/user/register-worker`)
+    console.log("sending to API", data);
+    
+    return apiClient.post(`/user/register-worker`, data)
 }
 
 const loginWorker = () => {

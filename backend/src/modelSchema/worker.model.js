@@ -36,7 +36,7 @@ const workerSchema = new Schema (
     }
 )
 
-
+// add Confirm password
 
 workerSchema.methods.generateAccessToken = function () {
     return jwt.sign(
