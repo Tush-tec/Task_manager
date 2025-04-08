@@ -1,5 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
+import { createWorker } from "../controller/worker.admin.js";
+
 
 const router = Router();
 
@@ -33,5 +35,11 @@ router.get("/logout", (req, res) => {
   res.clearCookie("refreshToken");
   res.json({ message: "Logged out" });
 });
+
+
+// ==========
+
+router.post("/register", createWorker)
+
 
 export default router;
