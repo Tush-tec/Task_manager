@@ -41,8 +41,8 @@ const registerWorker = (data) => {
     return apiClient.post(`/user/register-worker`, data)
 }
 
-const loginWorker = () => {
-    return apiClient.post(`/user/login`)
+const loginWorker = (data) => {
+    return apiClient.post(`/user/login-worker`, data)
 }
 
 

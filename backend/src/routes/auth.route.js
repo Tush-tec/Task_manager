@@ -39,8 +39,8 @@ router.get("/logout", (req, res) => {
 
 // ==========
 
-router.post("/register", createWorker)
-router.post('/login', loginWorker)
+router.post("/register-worker", createWorker)
+router.post('/login-worker', loginWorker)
 router.post(  `/logout/:workerId`, logoutWorker)
 
 export default router;

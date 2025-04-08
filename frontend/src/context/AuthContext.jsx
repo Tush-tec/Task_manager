@@ -15,7 +15,7 @@
             }
         )
 
-        const useAuth = () => {
+        const   useAuth = () => {
             return useContext(AuthContext)
         }
 
@@ -41,7 +41,7 @@
                         navigate("/login")
                     },
                     (error) =>{
-                        setError(error || error.message)
+                        setError(error )
                         setIsloading(false)
                     }
                 )
@@ -49,42 +49,43 @@
 
 
 
-            const login =async () => {
+            const login = async (data) => {
                 setIsloading(true)
-
-
-                await requestHandler (
-                    async () =>  loginWorker(),
+            
+                await requestHandler(
+                    async () => loginWorker(data),
                     setIsloading,
-                    (res) =>{
+                    (res) => {
                         alert("Login Success")
-
-                        const { loginUser ,accessToken, refreshToken} = res.data
-
-                        if(loginUser && accessToken){
-                            setUser(loginUser)
-                            setToken(accessToken)
-                            setIsAuthenticate(true)
-
-
-                            localStorage.setItem("user", JSON.stringify(loginUser))
-                            localStorage.setItem('token', accessToken)
-                            localStorage.setItem("refreshToken", refreshToken)
-
-                            navigate('/')
+                        
+                        const { data } = res;
+                        const { worker, accessToken, refreshToken } = data;
+                        
+                        if (worker && accessToken) {
+                          setUser(worker);
+                          setToken(accessToken);
+                          setIsAuthenticate(true);
+                        
+                          localStorage.setItem("user", JSON.stringify(worker)); 
+                          localStorage.setItem("token", accessToken);
+                          localStorage.setItem("refreshToken", refreshToken);
+                        
+                          navigate("/");
                         } else {
-                            alert("Invalid Credentials")
-                            console.error(error || error.message);
-                            
+                          alert("Invalid Credentials");
+                          console.error("Worker or token missing in response.");
                         }
+                        
                     },
                     (error) => {
-                        console.error("Login error:", error);
-                        setError(error); 
-                        setIsloading(false);
+                        console.error("Login error:", error)
+                        setError(error)
+                        setIsloading(false)
                     }
                 )
             }
+            
+            
 
 
             const logout =async () => {
@@ -103,8 +104,8 @@
                         navigate(login)
                     },
                     (error) =>{
-                        console.log(error || error.message);
-                        setError(error || error.message)
+                        console.log(error);
+                        setError(error)
                         
                     }
                 )
@@ -112,25 +113,24 @@
             }
 
 
-            useEffect(()=>{
-
+            useEffect(() => {
                 const token = localStorage.getItem("token")
                 const storedUser = localStorage.getItem("user")
-
+            
                 if (token && storedUser) {
-                try {
-                    const parsedUser = JSON.parse(storedUser)
-                    setUser(parsedUser)
-                    setToken(token)
-                    setIsAuthenticate(true)
-                } catch (e) {
-                    console.error("Failed to parse user:", e)
-                }
+                    try {
+                        const parsedUser = JSON.parse(storedUser) // ✅ Fix
+                        setUser(parsedUser)
+                        setToken(token)
+                        setIsAuthenticate(true)
+                    } catch (e) {
+                        console.error("Failed to parse user from localStorage:", e)
+                    }
                 } else {
-                console.warn("Token not found or invalid user")
+                    console.warn("Token not found or invalid user")
                 }
-
-            },[])
+            }, [])
+            
 
             return (
                 <AuthContext.Provider value={

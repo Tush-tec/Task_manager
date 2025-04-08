@@ -42,7 +42,13 @@ const createWorker = async(req,res) => {
     
     
         if( !username || !email || !password ){
-            throw new Error("Please provide all the required fields")
+
+            return res.status(404).json(
+                {
+                    "error": "Please provide all the required fields",
+                }
+            )
+            
         }
     
     
@@ -51,11 +57,14 @@ const createWorker = async(req,res) => {
                 username : username
             }
         )
+        
     
         if(isExistUsername){
-            throw new Error(
-                "Username already exists"
-            )
+
+            return res.status(404).json({
+                "error": "Username already exists",
+            })
+        
         }
     
     
@@ -66,9 +75,15 @@ const createWorker = async(req,res) => {
         )
     
         if(isExistEmail){
-            throw new Error(
-                "Email already exists"
+
+            return res
+            .status(401)
+            .json(
+                {
+                    "error": "Email already exists",
+                }
             )
+    
         }
     
         const passwordHashing = await bcrypt.hash(password, 10)
@@ -81,15 +96,14 @@ const createWorker = async(req,res) => {
             }
         )
 
-        if(!createWorker){
-            throw new Error("Failed to create worker")
-        }
+       
 
 
         return res
         .status(201)
         .json(
             {
+                success:true,
                 message : "worker created successFully",
                 worker : createWorker,
             }
@@ -97,8 +111,12 @@ const createWorker = async(req,res) => {
     } catch (error) {
         console.log(error || error.message);
 
-        return new Error(
-            error  || error.message
+        return res.status(500).json(
+            {
+                error :error.message,
+                success : false
+
+            }
         )
         
     }
@@ -109,73 +127,113 @@ const createWorker = async(req,res) => {
 
 const loginWorker = async (req,res) => {
 
-    const {username, email, password} = req.body 
-
-
-    if(!username){
-        throw new Error("Username is required")
-    }
-
-    if(!email){
-        throw new Error("Email is required")
-    }
-
-    if(!password){
-        throw new Error("Fill Your password!")
-    }
-
-
-    const worker = await Worker.findOne(
-        {
-           
-            $and : [
-                {username: username},
-                {email: email},
-            ]
-           
-        }
-    )
-
-    if(!worker){
-        throw new Error("Worker not found, Please ensure your username and email are correct")
-    }
-
-    const isvalidPassword = bcrypt.compare(
-        password,
-        worker.password,
+   try {
+     const {username, email, password} = req.body 
+ 
+ 
+     if(!username){
+        return res
+        .status(403)
+        .json({
+         success : false,
+         message : "username is required",
+        })
+     }
+ 
+     if(!email){
+         return res
+         .status(403)
+         .json({
+             success : false,
+             message : "email is required",
+ 
+         })
+     }
+ 
+     if(!password){
+         return res
+         .status(400)
+         .json({
+             success : false,
+             message : "password is required",
+ 
+         })
+     }
+ 
+ 
+     const worker = await Worker.findOne(
+         {
+            
+             $and : [
+                 {username: username},
+                 {email: email},
+             ]
+            
+         }
+     )
+ 
+     if(!worker){
+ 
+         return res
+         .status(404)
+         .json({
+             success : false,
+             message :"Worker not found, Please ensure your username and email are correct"
+         })
         
-    )
+     }
+ 
+     const isvalidPassword = bcrypt.compare(
+         password,
+         worker.password,
+         
+     )
+ 
+     if(!isvalidPassword){
+         return res
+         .status(400)
+         .json({
+             success : false,
+             message : "Invalid password",
+         })
+     }
+ 
+     const {accessToken, refreshToken} = await genrateToken(worker._id)
+ 
+ 
+     const logedWorker = await Worker.findById(worker._id).select(" -password -refreshToken")
+ 
+     const cookie = {
+         httpOnly: true,
+         maxAge: 30 * 24 * 60 * 60 * 1000,
+         sameSite: "strict",
+         secure: true,
+     }
+ 
+     return res
+  .cookie("accessToken", accessToken, cookie)
+  .cookie("refreshToken", refreshToken, cookie)
+  .status(201)
+  .json({
+    message: "Worker logged in successfully",
+    status: 201,
+    success: true,
+    data: {
+      worker: logedWorker,
+      accessToken,
+      refreshToken,
+    },
+  });
 
-    if(!isvalidPassword){
-        throw new Error("Invalid password")
-    }
+   } catch (error) {
+    return res
+    .status(500)
+    .json({
+        success: false,
+        error : error || error.message
+    })
 
-    const {accessToken, refreshToken} = await genrateToken(worker._id)
-
-
-    const logedWorker = await Worker.findById(worker._id).select(" -password -refreshToken")
-
-    const cookie = {
-        httpOnly: true,
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        sameSite: "strict",
-        secure: true,
-    }
-
-    return  res
-    .cookie("accessToken", accessToken,  cookie)
-    .cookie("refreshToken", refreshToken, cookie)
-    .status(201)
-    .json(
-        {
-            "message" :"worker logged in successFully",
-            "status" : 201,
-            "data" : logedWorker,
-           accessToken: accessToken,
-            refreshToken: refreshToken
-
-        }
-    )
+   }
 
 }
 
