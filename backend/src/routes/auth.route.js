@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import { createWorker, loginWorker, logoutWorker } from "../controller/worker.admin.js";
+import { Worker } from "../modelSchema/worker.model.js";
 
 
 const router = Router();
@@ -15,26 +16,44 @@ router.get(
 
 router.get(
   "/auth/google/callback",
-  passport.authenticate("google", { session: false }),
-  (req, res) => {
-    const { accessToken, refreshToken, user } = req.user;
+  passport.authenticate("google", {
+    failureRedirect: "http://localhost:5173/login",
+    session: false,
+  }),
+  async (req, res) => {
+    try {
 
-    res.cookie("accessToken", accessToken, { httpOnly: true });
-    res.cookie("refreshToken", refreshToken, { httpOnly: true });
+      console.log("check response", req.user);
+      
+      const { user, accessToken, refreshToken } = req.user;
 
-    res.json({ user, accessToken, refreshToken});
+      const userData = encodeURIComponent(JSON.stringify(user));
 
-    // Option 2: Or set cookies here
-
-    // res.redirect("http://localhost:3000/dashboard");
+      res.redirect(
+        `http://localhost:5173/google/success#user=${userData}&accessToken=${accessToken}&refreshToken=${refreshToken}`
+      );
+    } catch (err) {
+      console.error("Google callback error:", err.message);
+      res.redirect("http://localhost:5173/login");
+    }
   }
 );
+
+
+
+
 
 router.get("/logout", (req, res) => {
   res.clearCookie("accessToken");
   res.clearCookie("refreshToken");
   res.json({ message: "Logged out" });
 });
+
+
+// router.get("/auth/failed", (req, res) => {
+//   res.status(401).json({ message: "Google login failed" });
+// });
+
 
 
 // ==========

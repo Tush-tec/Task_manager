@@ -22,6 +22,14 @@ app.use(
 );
 
 app.use(passport.initialize());
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
+});
+
 
 import adminRouter  from "./routes/admin.route.js"
 import userRouter from "./routes/auth.route.js";

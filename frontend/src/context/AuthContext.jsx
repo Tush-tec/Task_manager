@@ -1,6 +1,6 @@
         import {  createContext, useContext, useEffect, useState } from "react";
         import { requestHandler } from "../utils/accessory";
-        import { loginWorker, registerWorker } from "../api/api";
+        import { loginWorker, registerWorker, workerLoginOrRegisterWithGoogle } from "../api/api";
         import { useNavigate } from "react-router-dom";
         import Loader from "../pages/Loader";
 
@@ -86,6 +86,19 @@
             }
             
             
+            const googleLogin = async () => {
+
+                setIsloading(true)
+
+                await requestHandler (
+                    async () => workerLoginOrRegisterWithGoogle(),
+                    setIsloading,
+                    (res) => {
+                        console.log(res);
+                        
+                    }
+                )
+            }
 
 
             const logout =async () => {
@@ -142,7 +155,10 @@
                         isLoading,
                         register,
                         login,
-                        logout
+                        logout,
+                        setUser,             
+                        setToken,           
+                        setIsAuthenticate  
                     }
                 }>
 
