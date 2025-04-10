@@ -8,14 +8,13 @@ const GoogleSuccess = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.hash.substring(1));
-    
+
     const user = params.get("user");
     const accessToken = params.get("accessToken");
     const refreshToken = params.get("refreshToken");
 
     if (user && accessToken && refreshToken) {
       const parsedUser = JSON.parse(decodeURIComponent(user));
-      console.log("parsed user",parsedUser);
       
       localStorage.setItem("user", JSON.stringify(parsedUser));
       localStorage.setItem("token", accessToken);

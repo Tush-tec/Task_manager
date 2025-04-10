@@ -1,7 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
 import { createWorker, loginWorker, logoutWorker } from "../controller/worker.admin.js";
-import { Worker } from "../modelSchema/worker.model.js";
 
 
 const router = Router();
@@ -21,10 +20,7 @@ router.get(
     session: false,
   }),
   async (req, res) => {
-    try {
-
-      console.log("check response", req.user);
-      
+    try {      
       const { user, accessToken, refreshToken } = req.user;
 
       const userData = encodeURIComponent(JSON.stringify(user));
