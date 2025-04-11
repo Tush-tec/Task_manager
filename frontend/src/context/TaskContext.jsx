@@ -10,8 +10,7 @@ import { requestHandler } from "../utils/accessory"
 import Loader from "../Component/Loader"
 
 const taskContext = createContext({
-  task: [],
-  createTask: async () => {},
+  createTask:async () => {},
   getTask: async () => {},
   getTaskById: async () => {},
   updateTask: async () => {},
@@ -32,6 +31,7 @@ export const TaskProvider = ({ children }) => {
   const [taskListFilterCount, setTaskListFilterCount] = useState(0)
 
   const createTask = async (data) => {
+    console.log("Creating task with data:", data)
     setIsLoading(true)
     await requestHandler(
 
@@ -46,7 +46,10 @@ export const TaskProvider = ({ children }) => {
         setError(null)
         
       },
-      (err) => setError(err)
+      (err) => {
+        console.log(err)
+        setError(err)
+      }
     )
   }
 
@@ -125,8 +128,7 @@ export const TaskProvider = ({ children }) => {
       }}
     >
 
-{ isLoading  ?  <Loader/>
-: children}
+{children}
 
 
     </taskContext.Provider>

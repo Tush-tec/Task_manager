@@ -20,8 +20,7 @@ const Home = () => {
 
 
           <div>
-            <p className=""
-            >
+            
               <Link to='/create-task'>
              <div>
               <button className="p-2 m-2  rounded bg-green-200     text-black" >
@@ -29,7 +28,7 @@ const Home = () => {
               </button>
              </div>
               </Link>
-            </p>
+            
           </div>
         </div>
         

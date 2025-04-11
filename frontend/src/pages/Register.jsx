@@ -17,7 +17,6 @@ const Register = () => {
     const handleInputField = (e) => {
         const {name, value} = e.target
 
-
         setRegisterData(
             (prevDetails) => ({
                 ...prevDetails,
@@ -29,8 +28,7 @@ const Register = () => {
 
     const submitRegistration = async (e) =>{
         e.preventDefault()
-        console.log("data is submit");
-        
+                 
         await register(registerData)
     }
 

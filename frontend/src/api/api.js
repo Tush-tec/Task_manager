@@ -72,9 +72,9 @@ const deleteAdmin = (workerId) => {
 //               Worker                //
 
 
-    const createTaskforUser = (data) => {
+const createTaskforUser = (data) => {
         return apiClient.post("/task/create-task", data)
-    }
+}
     
 
 const getAllTask = () =>{

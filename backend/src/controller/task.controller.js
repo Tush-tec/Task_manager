@@ -45,7 +45,7 @@ const createTask = async (req,res) => {
         return res
         .status(200)
         .json(
-            {
+            {   success : true,
                 message : `Task is Created & given to ${assignedUser.username}`,
                 status :200,
                 task : task
@@ -55,7 +55,7 @@ const createTask = async (req,res) => {
         return res
         .status(500)
         .json(
-            {
+            {   
                 message : "Internal Server Error",
                 status :500,
                 error: error.message
