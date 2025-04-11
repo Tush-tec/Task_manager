@@ -2,8 +2,7 @@
         import { requestHandler } from "../utils/accessory";
         import { loginWorker, registerWorker, workerLoginOrRegisterWithGoogle } from "../api/api";
         import { useNavigate } from "react-router-dom";
-        import Loader from "../pages/Loader";
-
+        import Loader from "../Component/Loader";
 
         const AuthContext = createContext(
             {

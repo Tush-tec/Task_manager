@@ -5,6 +5,7 @@ import Register from '../pages/Register'
 import Home from '../pages/Home'
 import GoogleSuccess from '../pages/Pages'
 import Dashboard from '../pages/Dashboard'
+import CreateTask from '../pages/tasks/CreateTask'
 
 const PrivateRoutes = () => {
   return (
@@ -17,6 +18,7 @@ const PrivateRoutes = () => {
     <Route path="/google/success" element={<GoogleSuccess />} />
     <Route path='/register' element={<Register/>}/>
     <Route path='/login' element={<Login/>} />
+    <Route path = '/create-task' element={<CreateTask/>}/>
        
     </Routes>    
 

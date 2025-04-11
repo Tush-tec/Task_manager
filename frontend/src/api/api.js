@@ -72,15 +72,16 @@ const deleteAdmin = (workerId) => {
 //               Worker                //
 
 
-const createTask = () =>{
-    return apiClient.post("/task/create-task")
-}
+    const createTaskforUser = (data) => {
+        return apiClient.post("/task/create-task", data)
+    }
+    
 
 const getAllTask = () =>{
     return apiClient.get("/task/get-all-task")
 }
 
-const getTaskById= (taskId) =>{
+const getTaskforUser= (taskId) =>{
     return apiClient.get(`/task/get-task/${taskId}`)
 }
 
@@ -88,12 +89,12 @@ const updateTaskById = (taskId) => {
     return apiClient.patch(`/task/update-task-status/${taskId
     }`)
 }
-const updateTask = (taskId) =>{
+const updateTaskForUser= (taskId) =>{
 
     return apiClient.patch(`/task/update-task/${taskId}`)
 }
 
-const deleteTask = (taskId) => {
+const deleteTaskForUser = (taskId) => {
     return apiClient.delete(`/task/delete-task/${taskId}`)
 }
 
@@ -107,12 +108,12 @@ export {
     toggleRole,
     subAdmin,
     deleteAdmin,
-    createTask,
+    createTaskforUser,
     getAllTask,
-    getTaskById,
-    updateTask,
+    getTaskforUser,
+    updateTaskForUser,
     updateTaskById,
-    deleteTask,
+    deleteTaskForUser,
     registerWorker,
     loginWorker,
 

@@ -17,7 +17,22 @@ const Home = () => {
           >
             Go to Dashboard
           </Link>
+
+
+          <div>
+            <p className=""
+            >
+              <Link to='/create-task'>
+             <div>
+              <button className="p-2 m-2  rounded bg-green-200     text-black" >
+                Create Task
+              </button>
+             </div>
+              </Link>
+            </p>
+          </div>
         </div>
+        
       ) : (
         <div className="bg-white shadow-xl rounded-2xl p-10 max-w-lg w-full text-center">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">

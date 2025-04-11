@@ -4,8 +4,10 @@ import { LockClosedIcon, ArrowRightCircleIcon } from "@heroicons/react/20/solid"
 import { useAuth } from "../context/AuthContext";
 
 import { FcGoogle } from "react-icons/fc"; // Google Icon
-import Input from "../ component/Input";
-import Button from "../ component/Button";
+import Input from "../Component/Input";
+import Button from "../Component/Button";
+
+
 
 const Login = () => {
   const [userLogin, setUserLogin] = useState({ username: "", email: "", password: "" });
@@ -63,7 +65,8 @@ const Login = () => {
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
-          <Button className="bg-white p-2 m-2 border-white rounded" type="submit" disabled={!userLogin.username || !userLogin.password}>
+          <Button
+           className="bg-white p-2 m-2 border-white rounded" type="submit" disabled={!userLogin.username || !userLogin.password}>
             Login
           </Button>
         </form>
