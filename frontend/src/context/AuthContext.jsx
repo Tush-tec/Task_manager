@@ -1,6 +1,6 @@
         import {  createContext, useContext, useEffect, useState } from "react";
         import { requestHandler } from "../utils/accessory";
-        import { loginWorker, registerWorker, workerLoginOrRegisterWithGoogle } from "../api/api";
+        import { getAllWorkerFromDB, loginWorker, registerWorker, workerLoginOrRegisterWithGoogle } from "../api/api";
         import { useNavigate } from "react-router-dom";
         import Loader from "../Component/Loader";
 
@@ -10,7 +10,8 @@
                 token:null,
                 register : async () =>{},
                 login : async () => {},
-                logout : async () => {}
+                logout : async () => {},
+                fetchWorkers : async () => {}
             }
         )
 
@@ -24,6 +25,7 @@
             const [isLoading, setIsloading] = useState(false)
             const[error,  setError] = useState(null)
             const [user, setUser] = useState(null)
+            const [workers, setWorkers] = useState(null)
             const [token, setToken] =useState(null)
             const [isAuthenticate, setIsAuthenticate] = useState(false)
             const navigate = useNavigate()
@@ -85,21 +87,16 @@
             }
             
             
-            const googleLogin = async () => {
-
-                setIsloading(true)
-
-                await requestHandler (
-                    async () => workerLoginOrRegisterWithGoogle(),
-                    setIsloading,
-                    (res) => {
-                        console.log(res);
-                        
-                    }
-                )
-            }
-
-
+            const fetchWorkers = async () => {
+                try {
+                  const res = await getAllWorkerFromDB();                  
+                  setWorkers(res.data.data);
+                } catch (error) {
+                  console.error("Error fetching workers:", error);
+                  setError(error);
+                }
+              };
+              
             const logout =async () => {
 
                 setIsloading(true)
@@ -148,6 +145,7 @@
                 <AuthContext.Provider value={
                     {
                         user,
+                        workers,
                         token,
                         error,
                         isAuthenticate,
@@ -155,6 +153,7 @@
                         register,
                         login,
                         logout,
+                        fetchWorkers,
                         setUser,             
                         setToken,           
                         setIsAuthenticate  

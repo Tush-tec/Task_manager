@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTask } from '../../context/TaskContext'
 import Input from '../../Component/Input'
 import Loader from '../../Component/Loader'
 import Button from '../../Component/Button'
+import { useAuth } from '../../context/AuthContext'
 
 
 const CreateTask = () => {
   const { createTask, error, isLoading } = useTask()
+  const {fetchWorkers, workers} = useAuth()
 
   const [taskForm, setTaskForm] = useState({
     tittle : "",
@@ -37,6 +39,10 @@ const CreateTask = () => {
     
   }
 
+ useEffect(()=>{
+  fetchWorkers()
+ },[])
+
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-md">
       <h2 className="text-2xl font-semibold text-center mb-6 text-blue-600">Create New Task</h2>
@@ -60,14 +66,35 @@ const CreateTask = () => {
           rows={4}
         />
 
-        <Input
+<select
+  name='assignedTo'
+  value={taskForm.assignedTo}
+  onChange={handleChange}
+  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+>
+  <option value="">Select a worker</option>
+  {
+  workers?.map((worker) => {
+    return (
+      <option key={worker._id} value={worker._id}>
+        {worker.name || worker.email}
+      </option>
+    )
+  })
+}
+
+
+</select>
+
+        
+        {/* <Input
           type="text"
           name="assignedTo"
           placeholder="Assigned Worker ID"
           value={taskForm.assignedTo}
           onChange={handleChange}
           className="w-full"
-        />
+        /> */}
 
         <Input
           type="date"

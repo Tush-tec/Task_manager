@@ -72,6 +72,13 @@ const deleteAdmin = (workerId) => {
 //               Worker                //
 
 
+const getAllWorkerFromDB = () => {
+    return apiClient.get(
+        '/user/get-all-worker'
+    )
+}
+
+
 const createTaskforUser = (data) => {
         return apiClient.post("/task/create-task", data)
 }
@@ -116,6 +123,7 @@ export {
     deleteTaskForUser,
     registerWorker,
     loginWorker,
+    getAllWorkerFromDB
 
 
     
