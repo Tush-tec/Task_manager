@@ -282,9 +282,50 @@ const logoutWorker = async (req,res) =>{
    }
 }
 
+const getAllWorker = async (req,res) => {
+
+   try {
+         const worker= await Worker.find({}, "name email").select("-password")
+ 
+         if(!worker) {
+             return res.status(404).json({
+                 success : false,
+                 "message" : "No worker found",
+                 "status" : 404
+                 })
+         }
+ 
+         return res
+         .status(201)
+         .json(
+             {   
+             success :true,
+             "message" : "Worker found",
+             "status" : 201,
+             "data" : worker
+             
+ 
+         }
+        )
+   } catch (error) {
+     return res
+     .status(500)
+     .json(
+        {
+            message  : error ||  error.message,
+            status : 500,
+            
+        }
+     )
+   }
+    
+
+}
+
 export {
     createWorker,
     loginWorker,
-    logoutWorker
+    logoutWorker,
+    getAllWorker
 }
 
