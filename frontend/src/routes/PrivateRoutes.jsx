@@ -6,6 +6,7 @@ import Home from '../pages/Home'
 import GoogleSuccess from '../pages/Pages'
 import Dashboard from '../pages/Dashboard'
 import CreateTask from '../pages/tasks/CreateTask'
+import TaskDetails from '../pages/tasks/TaskDetails'
 
 const PrivateRoutes = () => {
   return (
@@ -19,6 +20,7 @@ const PrivateRoutes = () => {
     <Route path='/register' element={<Register/>}/>
     <Route path='/login' element={<Login/>} />
     <Route path = '/create-task' element={<CreateTask/>}/>
+    <Route path = '/get-task' element={<TaskDetails/> } />
        
     </Routes>    
 

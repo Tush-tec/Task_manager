@@ -30,6 +30,17 @@ const Home = () => {
               </Link>
             
           </div>
+          <div>
+            
+              <Link to='/get-task'>
+             <div>
+              <button className="p-2 m-2  rounded bg-gray-200     text-black" >
+                getTask
+              </button>
+             </div>
+              </Link>
+            
+          </div>
         </div>
         
       ) : (

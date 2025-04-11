@@ -59,8 +59,12 @@ export const TaskProvider = ({ children }) => {
       getAllTask,
       setIsLoading,
       (res) => {
-        setTaskList(res.data)
-        setTaskListCount(res.data.length)
+        console.log(res)
+        console.log(res.task)
+        
+        setTaskList(res.task)
+
+        setTaskListCount(res.task.length)
         setError(null)
       },
       (err) => setError(err)

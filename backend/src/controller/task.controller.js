@@ -72,13 +72,15 @@ const getAllTasks = async (req,res) => {
         if(!task){
             return res
             .status(404)
-            .json({message: "No task found"})
+            .json({
+              success :false,
+              message: "No task found"})
         }
 
         return res
         .status(200)
         .json(
-            {
+            { success : true,
                 message : "Task is Retrieved",
                 status :200,
                 task : task
@@ -88,7 +90,7 @@ const getAllTasks = async (req,res) => {
         return res
         .status(500)
         .json(
-            {
+            {   success : false,
                 message: "Failed to retrieve task",
                 status :500,
                 error: error.message
