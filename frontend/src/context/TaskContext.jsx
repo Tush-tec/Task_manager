@@ -39,7 +39,7 @@ export const TaskProvider = ({ children }) => {
       setIsLoading,
       (res) => {
 
-            console.log("Task Created:", res.data)
+            console.log("Task Created:", res)
         
         setTask([...task, res.data])
         setTaskCount((prev) => prev + 1)

@@ -1,4 +1,4 @@
-import { isValidObjectId } from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
 import { Task } from "../modelSchema/task.model.js";
 import { Worker } from "../modelSchema/worker.model.js";
 import { mailer } from "../../utils/mail.js";
@@ -58,7 +58,7 @@ const createTask = async (req,res) => {
             {   
                 message : "Internal Server Error",
                 status :500,
-                error: error.message
+                error: error
         
             }
         )
@@ -100,11 +100,96 @@ const getAllTasks = async (req,res) => {
 }
 
 
-const getTask = async (req,res) =>{
+const getTaskForWorker = async (req, res) => {
+  try {
+    const { workerId } = req.params;
+    const { status, dueDate, projectId, page = 1, limit = 10 } = req.query;
 
+    if (!isValidObjectId(workerId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid worker id",
+      });
+    }
+
+    const matchStage = {
+      assignedTo: new mongoose.Types.ObjectId(workerId),
+    };
+
+    // Optional filters
+    if (status) matchStage.status = status;
+    if (dueDate) matchStage.dueDate = new Date(dueDate);
+    if (projectId && isValidObjectId(projectId)) {
+      matchStage.projectId = new mongoose.Types.ObjectId(projectId);
+    }
+
+    const tasks = await Task.aggregate([
+      { $match: matchStage },
+      {
+        $lookup: {
+          from: "workers",
+          localField: "assignedTo",
+          foreignField: "_id",
+          as: "workerInfo",
+        },
+      },
+      { $unwind: "$workerInfo" }, 
+      {
+        $project: {
+          title: 1,
+          description: 1,
+          dueDate: 1,
+          status: 1,
+          assignedTo: 1,
+          projectId: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          workerInfo: {
+            _id: 1,
+            name: 1,
+            email: 1,
+            role: 1, 
+
+          }
+        }
+      },
+      {
+        $sort: { dueDate: 1 }
+      },
+      {
+        $skip: (parseInt(page) - 1) * parseInt(limit)
+      },
+      {
+        $limit: parseInt(limit)
+      }
+    ]);
     
 
-}
+    if (tasks.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No tasks found for this worker.",
+        data: [],
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Tasks retrieved successfully.",
+      count: tasks.length,
+      data: tasks,
+    });
+
+  } catch (error) {
+    console.error("Error fetching tasks for worker:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
 
 const getTaskById = async (req, res) => {
     try {
@@ -334,6 +419,7 @@ const deleteTask = async(req,res) =>{
 export {
     createTask,
     getAllTasks,
+    getTaskForWorker,
     getTaskById,
     updateTaskById,
     updateTaskStatus,
