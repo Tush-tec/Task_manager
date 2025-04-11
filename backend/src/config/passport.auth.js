@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 
 dotenv.config();
 
+
 passport.use(
   new GoogleStrategy(
     {
@@ -29,13 +30,18 @@ passport.use(
         const accessTokenJWT = jwt.sign(
           { _id: user._id, role: user.role },
           process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: "15m" }
+          { expiresIn: process.env.TOKEN_EXPIRY
+
+          }
         );
 
         const refreshTokenJWT = jwt.sign(
           { _id: user._id },
           process.env.REFRESH_TOKEN_SECRET,
-          { expiresIn: "7d" }
+          { 
+            expiresIn: process.env.TOKEN_EXPIRY_REFRESH
+
+           }
         );
 
         user.refreshToken = refreshTokenJWT;
