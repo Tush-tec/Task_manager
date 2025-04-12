@@ -10,6 +10,8 @@ import TaskDetails from '../pages/tasks/TaskDetails'
 import Sidebar from '../Component/Sidebar'
 import AdminDashboard from '../pages/dashboard/AdminDashboard'
 import ViewTask from '../pages/tasks/ViewTask'
+import UserDashboard from '../pages/dashboard/UserDashboard'
+import FindTaks from '../pages/tasks/FindTaks'
 
 const PrivateRoutes = () => {
   return (
@@ -27,6 +29,9 @@ const PrivateRoutes = () => {
     <Route  path='/sidebar' element={<Sidebar/>}/>
     <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
     <Route path="/task/:taskId" element={<ViewTask />} />
+
+    <Route path='/user' element={<UserDashboard/>}/>
+    <Route path='/user/:taskId' element={<FindTaks/>}/>
 
         
     </Routes>    

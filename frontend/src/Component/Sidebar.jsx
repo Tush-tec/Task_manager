@@ -38,6 +38,7 @@ const Sidebar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  
 
   return (
     <>
@@ -113,18 +114,32 @@ const Sidebar = () => {
             {/* <button className="p-2 bg-white rounded shadow hover:bg-gray-100">
               <FaClock />
             </button>
-            <button className="p-2 bg-white rounded shadow hover:bg-gray-100">
-              <FaBell />
-            </button> */}
+            */}
             <button className="p-2 bg-white rounded shadow hover:bg-gray-100">
               <FaSearch />
             </button>
-            <button
+
+
+              {
+                user?.role === "admin" ? (
+
+                  <button
               className="p-2 bg-white rounded shadow hover:bg-gray-100"
               onClick={() => setShowCreateForm(true)}
             >
               <FaPlus />
             </button>
+
+                ) :(
+                  <button className="p-2 bg-white rounded shadow hover:bg-gray-100">
+                  <FaBell />
+                </button>
+                )
+              }
+
+
+
+            
           </div>
 
           {/* My Tasks */}

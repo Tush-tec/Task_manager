@@ -88,9 +88,14 @@ const getAllTask = () =>{
     return apiClient.get("/task/get-all-task")
 }
 
-const getTaskforUser= (taskId) =>{
+const getTaskById = (taskId) => {
     return apiClient.get(`/task/get-task/${taskId}`)
 }
+
+const getTaskforUser= (taskId) =>{
+    return apiClient.get(`/task/get-task-indi/${taskId}`)
+}
+
 
 const updateTaskById = (taskId) => {
     return apiClient.patch(`/task/update-task-status/${taskId
@@ -123,7 +128,8 @@ export {
     deleteTaskForUser,
     registerWorker,
     loginWorker,
-    getAllWorkerFromDB
+    getAllWorkerFromDB,
+    getTaskById
 
 
     
