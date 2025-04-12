@@ -1,57 +1,62 @@
-import React, { useEffect, useState } from 'react'
-import { useTask } from '../../context/TaskContext'
-import Input from '../../Component/Input'
-import Loader from '../../Component/Loader'
-import Button from '../../Component/Button'
-import { useAuth } from '../../context/AuthContext'
+import React, { useEffect, useState } from 'react';
+import { useTask } from '../../context/TaskContext';
+import Input from '../../Component/Input';
+import Loader from '../../Component/Loader';
+import Button from '../../Component/Button';
+import { useAuth } from '../../context/AuthContext';
+import { FaTimes } from 'react-icons/fa';
 
-
-const CreateTask = () => {
-  const { createTask, error, isLoading } = useTask()
-  const {fetchWorkers, workers} = useAuth()
+const CreateTask = ({ onClose }) => {
+  const { createTask, error, isLoading } = useTask();
+  const { fetchWorkers, workers } = useAuth();
 
   const [taskForm, setTaskForm] = useState({
-    tittle : "",
+    tittle: '',
     description: '',
     assignedTo: '',
     dueDate: '',
-  })
+  });
 
   const handleChange = (e) => {
-
     setTaskForm({
       ...taskForm,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    await createTask(taskForm)
-    setTaskForm(
-        {
-            tittle: "",
-            description: "",
-            assignedTo: "",
-            dueDate: "",
-          }
-    )
-    
-  }
+    e.preventDefault();
+    await createTask(taskForm);
+    setTaskForm({
+      tittle: '',
+      description: '',
+      assignedTo: '',
+      dueDate: '',
+    });
+    onClose(); // close after successful creation
+  };
 
- useEffect(()=>{
-  fetchWorkers()
- },[])
+  useEffect(() => {
+    fetchWorkers();
+  }, []);
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-md">
-      <h2 className="text-2xl font-semibold text-center mb-6 text-blue-600">Create New Task</h2>
+    <div className="max-w-xl w-full mx-auto bg-gray-50 rounded-2xl shadow-2xl p-6 relative z-50">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-blue-600">Create New Task</h2>
+        <button
+          className="text-gray-500 hover:text-red-500 transition"
+          onClick={onClose}
+        >
+          <FaTimes className="w-5 h-5" />
+        </button>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           type="text"
           name="tittle"
-          placeholder="Task titte"
+          placeholder="Task title"
           value={taskForm.tittle}
           onChange={handleChange}
           className="w-full"
@@ -66,35 +71,19 @@ const CreateTask = () => {
           rows={4}
         />
 
-<select
-  name='assignedTo'
-  value={taskForm.assignedTo}
-  onChange={handleChange}
-  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
->
-  <option >Select a worker</option>
-  {
-  workers?.map((worker) => {
-    return (
-      <option key={worker._id} value={worker._id}>
-        {worker.name || worker.email}
-      </option>
-    )
-  })
-}
-
-
-</select>
-
-        
-        {/* <Input
-          type="text"
+        <select
           name="assignedTo"
-          placeholder="Assigned Worker ID"
           value={taskForm.assignedTo}
           onChange={handleChange}
-          className="w-full"
-        /> */}
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">Select a worker</option>
+          {workers?.map((worker) => (
+            <option key={worker._id} value={worker._id}>
+              {worker.name || worker.email}
+            </option>
+          ))}
+        </select>
 
         <Input
           type="date"
@@ -104,18 +93,28 @@ const CreateTask = () => {
           className="w-full"
         />
 
-        <Button
-          type="submit"
-          className="w-full flex justify-center items-center bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300 disabled:opacity-50"
-          disabled={isLoading}
-        >
-            create task
-        </Button>
+        <div className="flex justify-end gap-3 mt-6">
+          <button
+            type="button"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:text-red-600 hover:border-red-400 transition duration-300"
+            onClick={onClose}
+          >
+            <FaTimes /> Cancel
+          </button>
 
-        {error && <p className="text-red-500 text-center">{error}</p>}
+          <Button
+            type="submit"
+            className="bg-blue-600  text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition duration-300 disabled:opacity-50"
+            disabled={isLoading}
+          >
+            {isLoading ? <Loader /> : 'Create Task'}
+          </Button>
+        </div>
+
+        {error && <p className="text-red-500 text-center mt-2">{error}</p>}
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default CreateTask
+export default CreateTask;
