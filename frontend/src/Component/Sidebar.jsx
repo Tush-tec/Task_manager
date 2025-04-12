@@ -44,7 +44,7 @@ const Sidebar = () => {
             <div className="flex items-center gap-2 relative" ref={dropdownRef}>
               {user?.picture ? (
                 <img
-                  src={user.picture}
+                  src={user?.picture}
                   alt="user"
                   className="w-8 h-8 rounded-full object-cover cursor-pointer"
                   referrerPolicy="no-referrer"
