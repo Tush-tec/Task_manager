@@ -7,6 +7,7 @@ import GoogleSuccess from '../pages/Pages'
 import Dashboard from '../pages/Dashboard'
 import CreateTask from '../pages/tasks/CreateTask'
 import TaskDetails from '../pages/tasks/TaskDetails'
+import Sidebar from '../Component/Sidebar'
 
 const PrivateRoutes = () => {
   return (
@@ -21,6 +22,7 @@ const PrivateRoutes = () => {
     <Route path='/login' element={<Login/>} />
     <Route path = '/create-task' element={<CreateTask/>}/>
     <Route path = '/get-task' element={<TaskDetails/> } />
+    <Route  path='/sidebar' element={<Sidebar/>}/>
        
     </Routes>    
 
