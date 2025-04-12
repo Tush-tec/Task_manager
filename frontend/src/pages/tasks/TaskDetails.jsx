@@ -1,65 +1,71 @@
-import React, { useEffect } from 'react'
-import { useTask } from '../../context/TaskContext'
+import React, { useEffect } from 'react';
+import { useTask } from '../../context/TaskContext';
+import { motion } from 'framer-motion';
 
 const TaskDetails = () => {
-  const { taskList, getTask } = useTask()
+  const { taskList, getTask } = useTask();
 
   useEffect(() => {
-    getTask()
-  }, [])
+    getTask();
+  }, []);
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold text-center text-blue-600 mb-6">📋 All Tasks</h2>
+    <>
+    {/* <Sidebar/> */}
+    <div className="p-4 ">
 
       {taskList && taskList.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {taskList.map((task) => (
-            <div
-              key={task._id}
-              className="bg-gray-800 text-white rounded-xl p-6 shadow-lg hover:shadow-blue-500 transition"
-            >
-              <h3 className="text-xl font-semibold text-center mb-3">
-                <span className="text-yellow-400">Title:</span>{' '}
-                <span className="text-white">{task.tittle}</span>
-              </h3>
-
-              <p className="mb-4">
-                <span className="text-yellow-400 font-medium">Description:</span>{' '}
-                <span className="text-gray-300">{task.description}</span>
-              </p>
-
-              <div className="text-sm text-gray-300 mb-4 space-y-1">
-                <p>
-                  <span className="text-yellow-400 font-medium">Assigned To:</span>{' '}
-                  {task.assignedTo.username}
-                </p>
-                <p>
-                  <span className="text-yellow-400 font-medium">Email:</span>{' '}
-                  {task.assignedTo.email}
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between mt-4">
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-semibold 
-                    ${task.status === 'done' ? 'bg-green-500' : 'bg-yellow-500'}`}
+        <div className="overflow-auto rounded-xl shadow-lg">
+          <table className="min-w-full table-auto bg-white rounded-xl overflow-hidden border border-indigo-200">
+          <thead className="bg-gradient-to-r from-indigo-500 to-sky-500 text-white sticky top-0 z-10">
+          <tr>
+                <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Title</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Assigned Email</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Due Date</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {taskList.map((task, index) => (
+                <motion.tr
+                  key={task._id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  className={`${
+                    index % 2 === 0 ? 'bg-slate-50' : 'bg-white'
+                  } hover:bg-indigo-50 hover:shadow-md transition rounded`}
                 >
-                  {task.status.toUpperCase()}
-                </span>
-                <span className="text-sm text-gray-300">
-                  <span className="text-yellow-400 font-medium">Due:</span>{' '}
-                  {new Date(task.dueDate).toLocaleDateString()}
-                </span>
-              </div>
-            </div>
-          ))}
+                  <td className="px-6 py-4 text-sm text-gray-800">{task.tittle}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{task.assignedTo.email}</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">
+                    {new Date(task.dueDate).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 text-sm">
+                    <span
+                      className={`px-3 py-1 rounded-full font-semibold text-xs text-white shadow ${
+                        task.status === 'done'
+                          ? 'bg-emerald-500'
+                          : task.status === 'working'
+                          ? 'bg-amber-400'
+                          : 'bg-rose-500'
+                      }`}
+                    >
+                      {task.status.toUpperCase()}
+                    </span>
+                  </td>
+                </motion.tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       ) : (
-        <p className="text-center text-gray-500">No tasks available.</p>
+        <p className="text-center text-gray-400 text-lg mt-8">No tasks available.</p>
       )}
     </div>
-  )
-}
 
-export default TaskDetails
+    </>
+  );
+};
+
+export default TaskDetails;

@@ -304,7 +304,7 @@ const updateTaskById = async (req, res) => {
     try {
       const { taskId } = req.params;
       const { status } = req.body;
-      const user = req.user._id;
+      const user = req.user?._id;
   
 
   

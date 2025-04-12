@@ -31,33 +31,28 @@ export const TaskProvider = ({ children }) => {
   const [taskListFilterCount, setTaskListFilterCount] = useState(0)
 
   const createTask = async (data) => {
-    console.log("Creating task with data:", data)
-    setIsLoading(true)
+    setIsLoading(true);
     await requestHandler(
-
       () => createTaskforUser(data),
       setIsLoading,
-      (res) => {        
-        setTask([...task, res.data])
-        setTaskCount((prev) => prev + 1)
-        setError(null)
-        
+      async (res) => {
+        await getTask(); 
+        setError(null);
       },
       (err) => {
-        console.log(err )
-        setError(err)
+        console.log(err);
+        setError(err);
       }
-    )
-  }
+    );
+  };
 
   const getTask = async () => {
     setIsLoading(true)
     await requestHandler(
       getAllTask,
       setIsLoading,
-      (res) => {
-        console.log(res)
-        console.log(res.task)
+      (res) => {        
+        console.log(res);
         
         setTaskList(res.task)
 

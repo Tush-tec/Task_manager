@@ -17,6 +17,13 @@ const Home = () => {
           >
             Go to Dashboard
           </Link>
+          <Link
+            to="/admin-dashboard"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full transition duration-300"
+          >
+
+            Admin dashbord
+          </Link>
 
 
           <div>

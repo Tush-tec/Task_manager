@@ -8,6 +8,7 @@ import Dashboard from '../pages/Dashboard'
 import CreateTask from '../pages/tasks/CreateTask'
 import TaskDetails from '../pages/tasks/TaskDetails'
 import Sidebar from '../Component/Sidebar'
+import AdminDashboard from '../pages/dashboard/AdminDashboard'
 
 const PrivateRoutes = () => {
   return (
@@ -23,7 +24,8 @@ const PrivateRoutes = () => {
     <Route path = '/create-task' element={<CreateTask/>}/>
     <Route path = '/get-task' element={<TaskDetails/> } />
     <Route  path='/sidebar' element={<Sidebar/>}/>
-       
+    <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
+        
     </Routes>    
 
     </>

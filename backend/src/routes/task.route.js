@@ -30,7 +30,7 @@ router.route("/update-task/:taskId").patch(
 )
 
 router.route("/update-task-status/:taskId").patch(
-    authenticateMiddle,
+    // authenticateMiddle,
     updateTaskStatus
 )
 
