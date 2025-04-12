@@ -69,6 +69,7 @@ export const TaskProvider = ({ children }) => {
       () => getTaskforUser(taskId),
       setIsLoading,
       (res) => {
+        console.log("response from context",res);
         setTask(res.data)
         setError(null)
       },

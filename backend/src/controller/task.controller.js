@@ -201,7 +201,9 @@ const getTaskById = async (req, res) => {
       const { taskId } = req.params;
   
       if (!isValidObjectId(taskId)) {
-        return res.status(400).json({ message: "Invalid task ID" });
+        return res.status(400).json({ 
+          success :false,
+          message: "Invalid task ID" });
       }
   
       const task = await Task.findById(taskId).populate({
@@ -210,16 +212,21 @@ const getTaskById = async (req, res) => {
       });
   
       if (!task) {
-        return res.status(404).json({ message: "No task assigned yet. You're all caught up!" });
+        return res.status(404).json({ 
+          success :false,
+
+          message: "No task assigned yet. You're all caught up!" });
       }
   
       return res.status(200).json({
+        success: true,
         message: `Task assigned to user ${task.assignedTo?.username || "Unknown"}`,
         taskCount: 1,
-        task: [task], 
+        data: task, 
       });
     } catch (error) {
       return res.status(500).json({
+        success :false,
         message: "Failed to retrieve task",
         error: error.message,
       });

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useTask } from '../../context/TaskContext';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const TaskDetails = () => {
   const { taskList, getTask } = useTask();
@@ -36,11 +37,29 @@ const TaskDetails = () => {
                     index % 2 === 0 ? 'bg-slate-50' : 'bg-white'
                   } hover:bg-indigo-50 hover:shadow-md transition rounded`}
                 >
-                  <td className="px-6 py-4 text-sm text-gray-800">{task.tittle}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{task.assignedTo.email}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
-                    {new Date(task.dueDate).toLocaleDateString()}
+                 <td className="px-6 py-4 text-sm text-gray-800">
+                  
+                 <Link to={`/task/${task._id}`}>
+
+                  {task.tittle}
+                  </Link> 
+
+                  
                   </td>
+                  <Link to={`/task/${task._id}`}>
+
+                  <td className="px-6 py-4 text-sm text-gray-600">
+                    {task.assignedTo.email}
+                    </td>
+                    </Link>
+
+                  <td className="px-6 py-4 text-sm text-gray-500">
+                    <Link to={`/task/${task._id}`}>
+                    {new Date(task.dueDate).toLocaleDateString()}
+                    </Link>
+                  </td>
+
+
                   <td className="px-6 py-4 text-sm">
                     <span
                       className={`px-3 py-1 rounded-full font-semibold text-xs text-white shadow ${
