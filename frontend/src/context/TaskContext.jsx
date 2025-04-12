@@ -37,17 +37,14 @@ export const TaskProvider = ({ children }) => {
 
       () => createTaskforUser(data),
       setIsLoading,
-      (res) => {
-
-            console.log("Task Created:", res)
-        
+      (res) => {        
         setTask([...task, res.data])
         setTaskCount((prev) => prev + 1)
         setError(null)
         
       },
       (err) => {
-        console.log(err)
+        console.log(err )
         setError(err)
       }
     )

@@ -19,7 +19,9 @@ const requestHandler = async (api, setLoading, onSuccess, onError) => {
           onSuccess(data);
         } else {
           console.error("Unexpected API Response:", data);
-          onError("Something went wrong with the API response");
+          onError(data.
+            error
+             || "Something went wrong with the API response");
         }
       } else {
         onError(data?.message || `Error: ${status}`);

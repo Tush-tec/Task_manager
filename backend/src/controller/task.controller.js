@@ -11,7 +11,10 @@ const createTask = async (req,res) => {
         if(!tittle || !description  || !dueDate){
             return res
             .status(400)
-            .json({message: "Please fill in all fields"})
+            .json({
+              
+              success:false,
+              message: "Please fill in all fields"})
         }
 
         const assignedUser = await Worker.findById(assignedTo)
@@ -19,7 +22,8 @@ const createTask = async (req,res) => {
         if(!assignedUser){
             return res
             .status(404)
-            .json({message: "Assigned user not found"})
+            .json({
+              success:false,message: "Assigned user not found"})
         }
 
         
@@ -39,7 +43,7 @@ const createTask = async (req,res) => {
         if(!task){
             return res
             .status(500)
-            .json({message: "Failed to create task"})
+            .json({success:false,message: "Failed to create task"})
         }
     
         return res
@@ -56,6 +60,7 @@ const createTask = async (req,res) => {
         .status(500)
         .json(
             {   
+              success : false,
                 message : "Internal Server Error",
                 status :500,
                 error: error

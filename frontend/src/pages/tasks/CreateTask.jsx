@@ -72,7 +72,7 @@ const CreateTask = () => {
   onChange={handleChange}
   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 >
-  <option value="">Select a worker</option>
+  <option >Select a worker</option>
   {
   workers?.map((worker) => {
     return (
