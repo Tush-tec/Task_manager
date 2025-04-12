@@ -74,7 +74,7 @@
         (res) => {
           console.log("res from id", res.data)
           setTask(res.data)
-          setTaskListCount(res.task.length)
+          // setTaskListCount(res.task.length)
           setError(null)
           
         },
@@ -92,8 +92,9 @@
         () => getTaskforUser(taskId),
         setIsLoading,
         (res) => {
-          console.log("response from context",res);
+          // console.log("response from context",res.data.length);
           setTask(res.data)
+          setTaskListCount(res.data.length)
           setError(null)
         },
         (err) => setError(err)

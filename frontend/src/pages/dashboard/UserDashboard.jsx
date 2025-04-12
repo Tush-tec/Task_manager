@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 const UserDashboard = () => {
 
   const {user} = useAuth()
-  const { getTaskWorker, task, updateTask, isLoading,  } = useTask()
+  const { getTaskWorker, task, updateTask, isLoading, taskListCount  } = useTask()
 
   useEffect(() => {
 
@@ -31,6 +31,9 @@ const UserDashboard = () => {
 
       <main className="flex-1 p-6">
         <h1 className="text-2xl font-semibold mb-4">My Tasks</h1>
+
+        <h2 className="text-lg font-bold">Total Task of :{taskListCount}</h2>
+
 
         {isLoading ? (
           <p>Loading tasks...</p>
