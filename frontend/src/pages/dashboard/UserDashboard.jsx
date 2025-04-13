@@ -6,7 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 
 const UserDashboard = () => {
   const { user } = useAuth();
-  const { getTaskWorker, task, updateTask, isLoading, taskListCount } = useTask();
+  const { getTaskWorker  , task, updateTask, isLoading, taskListCount } = useTask();
 
   useEffect(() => {
     if (user?._id) {
@@ -14,10 +14,7 @@ const UserDashboard = () => {
     }
   }, [user]);
 
-  const handleStatusChange = (taskId, newStatus) => {
-    updateTask(taskId, { status: newStatus });
-  };
-
+ 
   return (
     <div className="flex h-screen overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800">
       {/* Sidebar */}

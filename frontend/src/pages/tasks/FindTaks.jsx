@@ -7,15 +7,25 @@ import Sidebar from '../../Component/Sidebar'
 
 const FindTask = () => {
   const { taskId } = useParams()
-  const { getTaskByIdForUser, task } = useTask()
+  const { getTaskByIdForUser, task, updateStatusForTask } = useTask()
 
   useEffect(() => {
     getTaskByIdForUser(taskId)
   }, [taskId])
 
+  const handleStatusChange = (e) => {
+
+    const newStatus = e.target.value
+
+    updateStatusForTask(task._id, { status: newStatus })
+  };
+
+
   if (!task) return null
 
   return (
+
+     
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <aside className="w-64 bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800">
@@ -34,7 +44,7 @@ const FindTask = () => {
             
             {/* Title */}
             <h2 className="text-3xl font-bold text-zinc-900 dark:text-white">
-              {task.title}
+              {task.tittle}
             </h2>
 
             {/* Highlighted Description */}
@@ -51,7 +61,18 @@ const FindTask = () => {
               <div className="flex items-center gap-2">
                 <CheckCircleIcon className="h-5 w-5 text-indigo-500" />
                 <span className="font-semibold">Status:</span>
-                <span className="capitalize">{task.status}</span>
+                <span className="capitalize">{task.status?.status || task.status}</span>
+
+                <select
+                  className="ml-3 px-2 py-1 border rounded-md bg-white dark:bg-zinc-700 dark:border-zinc-600 text-sm"
+                  value={task.status?.status || task.status}
+                  onChange={handleStatusChange}
+                >
+                 <option value="pending">Pending</option>
+                 <option value="in_progress"> In Progress</option>
+                 <option value="issue"> Issue</option>
+                 <option value="done"> Done</option>
+                </select>
               </div>
 
               {/* Assigned To */}

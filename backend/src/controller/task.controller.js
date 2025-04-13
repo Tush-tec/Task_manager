@@ -311,9 +311,11 @@ const updateTaskById = async (req, res) => {
     try {
       const { taskId } = req.params;
       const { status } = req.body;
+
       const user = req.user?._id;
   
-
+      console.log(`user ${user}`);
+      
   
       if (!isValidObjectId(taskId)) {
         return res.status(400).json({
@@ -332,8 +334,15 @@ const updateTaskById = async (req, res) => {
       }
   
 
-      if (task.assignedTo.toString() == user.toString()) {
+
+      console.log("task assigned was",task.assignedTo.toString());
+      console.log("task updated by", user.toString());
+      
+      
+
+      if (task.assignedTo.toString() !== user.toString()) {
         return res.status(403).json({
+          success: false,
           message: "You are not authorized to update this task",
           status: 403,
         });
@@ -342,6 +351,7 @@ const updateTaskById = async (req, res) => {
 
       if (task.status.toLowerCase() === "done") {
         return res.status(400).json({
+          success:false,
           message: "Task is already marked as done and cannot be updated",
           status: 400,
         });
@@ -350,6 +360,7 @@ const updateTaskById = async (req, res) => {
 
       if (!status || typeof status !== "string" || !status.includes(status.toLowerCase())) {
         return res.status(400).json({
+          success:false,
           message: `Invalid status. Allowed values: ${validStatuses.join(", ")}`,
           status: 400,
         });
@@ -360,6 +371,7 @@ const updateTaskById = async (req, res) => {
       await task.save();
   
       return res.status(200).json({
+        success:true,
         message: "Task status updated successfully",
         status: 200,
         updatedStatus: task.status,
@@ -367,9 +379,9 @@ const updateTaskById = async (req, res) => {
   
     } catch (error) {
       return res.status(500).json({
-        message: "Internal server error",
+        success:false,
+        message: error || error.message,
         status: 500,
-        error: error.message,
       });
     }
   };

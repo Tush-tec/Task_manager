@@ -6,6 +6,7 @@
     getTaskById,
     getTaskforUser,
     updateTaskForUser,
+    updateTaskStatus,
   } from "../api/api"
   import { requestHandler } from "../utils/accessory"
   import Loader from "../Component/Loader"
@@ -16,6 +17,7 @@
     getTask: async () => {},
     getTaskByIdForUser:  async () => {},
     getTaskWorker: async () => {},
+    updateStatusForTask : async () => {},
     updateTask: async () => {},
     deleteTask: async () => {}
   })
@@ -72,7 +74,7 @@
         () => getTaskById (taskId),
         setIsLoading,
         (res) => {
-          console.log("res from id", res.data)
+          // console.log("res from id", res.data)
           setTask(res.data)
           // setTaskListCount(res.task.length)
           setError(null)
@@ -100,6 +102,31 @@
         (err) => setError(err)
       )
     }
+
+
+    const updateStatusForTask = async (taskId, status) => {
+      setIsLoading(true);
+    
+      await requestHandler(
+        () => updateTaskStatus(taskId, status),
+        setIsLoading,
+        (res) => {
+          // Immediately update the task state with new status
+          setTask((prevTask) => ({
+            ...prevTask,
+            status: status,
+          }));
+    
+          setError(null);
+        },
+        (err) => {
+          console.log("error from update status", err);
+          setError(err);
+        }
+      );
+    };
+    
+
 
     const updateTask = async (taskId, updatedData) => {
       setIsLoading(true)
@@ -145,6 +172,7 @@
           getTask,
           getTaskByIdForUser,
           getTaskWorker,
+          updateStatusForTask,
           updateTask,
           deleteTask
         }}

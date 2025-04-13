@@ -97,8 +97,8 @@ const getTaskforUser= (taskId) =>{
 }
 
 
-const updateTaskStatus= (taskId) => {
-    return apiClient.patch(`/update-task-status/${taskId}`)
+const updateTaskStatus= (taskId, status) => {
+    return apiClient.patch(`/task/update-task-status/${taskId}`, status)
 
 }
 

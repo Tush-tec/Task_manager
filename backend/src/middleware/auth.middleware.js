@@ -20,6 +20,13 @@ export const isAdmin = (req,res, next) =>{
 export const authenticateMiddle = async (req, res, next) => {
     try {
       const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
+      // console.log(token);
+      // console.log("cookie", req.cookies?.accessToken);
+      // console.log("authorisation", req.header("Authorization")?.replace("Bearer ", ""));
+      
+
+      
+      
   
       if (!token) {
         return res.status(401).json({ 
