@@ -197,47 +197,94 @@ const logout = async (req, res) => {
     }
   };
   
-const toggleWorkerRole = async(req,res) => {
+const toggleWorkerRole = async (req, res) => {
+  try {
+    const { workerId } = req.params;
 
-    try {
-        const {workerId} = req.params
-    
-        if(!isValidObjectId(workerId)){
-            throw new Error(
-                "Invalid worker ID"
-            )
-        }
-    
-        const worker = await Worker.findById(workerId)
-    
-        if(worker.role === "subAdmin"){
-            throw new Error(
-                "Cannot change role of subAdmin or admin"
-            )
-        }
-    
-        worker.role =  worker.role === "worker" ? "subAdmin" : "worker"
-    
-        await worker.save()
-    
-        return res
-        .status(201)
-        .json(
-            {
-                message: `Role of worker ${worker.username} changed successfully`,
-                status: 201
-                
-            }
-        )
-    } catch (error) {
-        console.error("Error toggling worker role:", error.message);
-        return res.status(500).json({
-            message: "Error toggling worker role",
-            error: error.message
-        });
-        
+    if (!isValidObjectId(workerId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID",
+        status: 400,
+      });
     }
-}
+
+    const user = await Worker.findById(workerId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+
+    user.role = user.role === "worker" ? "subAdmin" : "worker";
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Role of ${user.username} changed to ${user.role}`,
+      data: user,
+    });
+
+  } catch (error) {
+    console.error("Error toggling user role:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while toggling role",
+      error: error.message,
+    });
+  }
+};
+
+const getManageableUsers = async (req, res) => {
+    try {
+
+        const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+  
+
+      const skip = (page - 1) * limit;
+  
+
+      const total = await Worker.countDocuments({
+        role: { $in: ["worker", "subAdmin"] }
+      });
+  
+
+      const users = await Worker.find({
+        role: { $in: ["worker", "subAdmin"] }
+      })
+        .select("-password -refreshToken")
+        .skip(skip)
+        .limit(limit)
+        .sort({ createdAt: -1 }); 
+  
+      return res.status(200).json({
+        success: true,
+        message: "Manageable users fetched successfully",
+        data: users,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+          hasNextPage: page * limit < total,
+          hasPrevPage: page > 1
+        }
+      });
+  
+    } catch (error) {
+      console.error("Error fetching users with pagination:", error.message);
+      return res.status(500).json({
+        success: false,
+        message: "Error fetching users",
+        error: error.message
+      });
+    }
+  };
+  
 
 const getAllsubAdmin = async (req, res) =>{
 
@@ -255,7 +302,7 @@ const getAllsubAdmin = async (req, res) =>{
      return res.status(
          200
      ).json(
-         {
+         {  success:true,
              message: "Admin list fetched successfully",
              status: 200,
              data: adminList
@@ -265,16 +312,12 @@ const getAllsubAdmin = async (req, res) =>{
    } catch (error) {
         console.error(error);
         return res.status(500).json({
+            success: false,
             message: "Error fetching admin list",
             error: error.message
         })
     }
 }
-
-
-
-
-
 
 const deleteSubAdmin = async (req, res) => {
     try {
@@ -319,5 +362,6 @@ export{
     logout,
     toggleWorkerRole,
     getAllsubAdmin,
-    deleteSubAdmin
+    deleteSubAdmin,
+    getManageableUsers
 }

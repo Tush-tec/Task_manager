@@ -115,6 +115,25 @@ const deleteTaskForUser = (taskId) => {
 }
 
 
+
+const changeRoleOfWorker = (workerId) =>{
+    return apiClient.patch(
+        `/admin/toggle-role/${workerId}`
+    )
+}
+
+const fetchAllSubAdmin = () => {
+    return apiClient.get(
+        "/admin/get-subadmin"
+    )
+}
+
+const fetchManageWorker = async (page = 1, limit = 10) => {
+    return apiClient.get(`/admin/manage-worker?page=${page}&limit=${limit}`);
+};
+
+
+
 export {
     workerLoginOrRegisterWithGoogle,
     workerLogin,
@@ -134,7 +153,10 @@ export {
     loginWorker,
     getAllWorkerFromDB,
     getTaskById,
-    updateTaskStatus
+    updateTaskStatus,
+    changeRoleOfWorker,
+    fetchAllSubAdmin,
+    fetchManageWorker
 
 
     

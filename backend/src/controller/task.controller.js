@@ -150,7 +150,7 @@ const assignMultipleWorkerToATask = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Team assigned to task successfully.",
-      task: updatedTask,
+      task: assignTaskToTeam,
     });
   } catch (error) {
     console.error(error);
