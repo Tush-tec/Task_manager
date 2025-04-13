@@ -11,7 +11,7 @@ const FindTask = () => {
 
   useEffect(() => {
     getTaskByIdForUser(taskId)
-  }, [taskId, getTaskByIdForUser])
+  }, [taskId])
 
   if (!task) return null
 
