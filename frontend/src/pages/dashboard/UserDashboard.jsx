@@ -50,16 +50,10 @@ const UserDashboard = () => {
                       <strong>Due:</strong> {new Date(t.dueDate).toLocaleDateString()}
                     </p>
                     <div className="flex items-center justify-between mt-4">
-                      <select
-                        value={t.status}
-                        onChange={(e) => handleStatusChange(t._id, e.target.value)}
-                        className="border border-gray-300 dark:border-zinc-600 rounded px-2 py-1 bg-white dark:bg-zinc-600 text-gray-900 dark:text-white"
-                      >
-                        <option value="pending">Pending</option>
-                        <option value="in_progress">In Progress</option>
-                        <option value="issue">Issue</option>
-                        <option value="done">Done</option>
-                      </select>
+                     
+                      <span className='text-white '>
+                        Status of Task : 
+                      </span>
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${
                           t.status === 'pending'
