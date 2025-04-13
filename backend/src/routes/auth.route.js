@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import { createWorker, getAllWorker, loginWorker, logoutWorker } from "../controller/worker.admin.js";
+import { authenticateMiddle } from "../middleware/auth.middleware.js";
 
 
 const router = Router();
@@ -56,8 +57,8 @@ router.get("/logout", (req, res) => {
 
 router.post("/register-worker", createWorker)
 router.post('/login-worker', loginWorker)
-router.post(  `/logout/:workerId`, logoutWorker)
-router.get('/get-all-worker', getAllWorker)
+router.post(  `/logout/:workerId`, authenticateMiddle, logoutWorker)
+router.get('/get-all-worker', authenticateMiddle,  getAllWorker)
 
 
 export default router;
