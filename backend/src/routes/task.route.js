@@ -6,7 +6,7 @@ import { authenticateMiddle, isAdmin,  } from "../middleware/auth.middleware.js"
 const router = Router()
 
 router.route("/create-task", ).post(
-    authenticateMiddle, isAdmin,
+    // authenticateMiddle, isAdmin,
     createTask
 )
 
