@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
+import React, { useState, useRef, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 import {
   FaSignOutAlt,
   FaCog,
@@ -8,14 +8,16 @@ import {
   FaBell,
   FaClock,
   FaStar,
-  FaChevronDown
-} from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
-import CreateTask from '../pages/tasks/CreateTask';
-import { motion, AnimatePresence } from 'framer-motion';
+  FaChevronDown,
+} from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import CreateTask from "../pages/tasks/CreateTask";
+import { motion, AnimatePresence } from "framer-motion";
+import { useTask } from "../context/TaskContext";
 
 const Sidebar = () => {
   const { user, logout } = useAuth();
+  const { task } = useTask();
   const [showDropdown, setShowDropdown] = useState(false);
   const [showProjects, setShowProjects] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -24,7 +26,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   useEffect(() => {
@@ -38,7 +40,6 @@ const Sidebar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  
 
   return (
     <>
@@ -46,7 +47,10 @@ const Sidebar = () => {
         <div>
           {user && (
             <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2 relative" ref={dropdownRef}>
+              <div
+                className="flex items-center gap-2 relative"
+                ref={dropdownRef}
+              >
                 {user?.picture ? (
                   <img
                     src={user?.picture}
@@ -65,19 +69,23 @@ const Sidebar = () => {
                 )}
                 <p className="text-sm font-medium">{user.username}</p>
                 <FaChevronDown
-                  className={`text-gray-500 text-xs cursor-pointer transition-transform duration-200 ${showDropdown ? 'rotate-180' : ''}`}
+                  className={`text-gray-500 text-xs cursor-pointer transition-transform duration-200 ${
+                    showDropdown ? "rotate-180" : ""
+                  }`}
                   onClick={() => setShowDropdown(!showDropdown)}
                 />
 
                 {/* Dropdown menu */}
                 <div
                   className={`absolute top-10 left-0 w-40 bg-white border shadow-lg rounded-md z-10 overflow-hidden transition-all duration-200 ease-in-out transform origin-top-left ${
-                    showDropdown ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                    showDropdown
+                      ? "opacity-100 scale-100"
+                      : "opacity-0 scale-95 pointer-events-none"
                   }`}
                 >
                   <button
                     onClick={() => {
-                      navigate('/settings');
+                      navigate("/settings");
                       setShowDropdown(false);
                     }}
                     className="flex items-center gap-2 px-4 py-2 w-full hover:bg-gray-100 text-sm"
@@ -95,7 +103,7 @@ const Sidebar = () => {
 
               <button
                 className="p-2 hover:bg-gray-200 rounded"
-                onClick={() => navigate('/tasks')}
+                onClick={() => navigate("/tasks")}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -119,40 +127,36 @@ const Sidebar = () => {
               <FaSearch />
             </button>
 
-
-              {
-                user?.role === "admin" ? (
-
-                  <button
-              className="p-2 bg-white rounded shadow hover:bg-gray-100"
-              onClick={() => setShowCreateForm(true)}
-            >
-              <FaPlus />
-            </button>
-
-                ) :(
-                  <button className="p-2 bg-white rounded shadow hover:bg-gray-100">
-                  <FaBell />
-                </button>
-                )
-              }
-
-
-
-            
+            {user?.role === "admin" ? (
+              <button
+                className="p-2 bg-white rounded shadow hover:bg-gray-100"
+                onClick={() => setShowCreateForm(true)}
+              >
+                <FaPlus />
+              </button>
+            ) : (
+              <button className="p-2 bg-white rounded shadow hover:bg-gray-100">
+                <FaBell />
+              </button>
+            )}
           </div>
 
           {/* My Tasks */}
           <div className="text-sm font-medium text-gray-600 mb-2">My Tasks</div>
           <div className="flex flex-col gap-1 text-sm mb-6">
             <button className="flex items-center justify-between px-2 py-2 rounded hover:bg-gray-100">
-              <span className="flex items-center gap-2">✅ My tasks</span>
-              <span className="text-gray-500 text-xs">0</span>
+              <Link to={"/user"}>
+                <span className="flex items-center gap-2">✅ My tasks</span>{" "}
+              </Link>
+
+              <span className="text-gray-500 text-xs">{task.length}</span>
             </button>
             <button className="flex items-center justify-between px-2 py-2 rounded hover:bg-gray-100">
               <span className="flex items-center gap-2">
                 📅 Today
-                <span className="ml-2 bg-gray-300 text-white text-xs px-2 rounded-full">12</span>
+                <span className="ml-2 bg-gray-300 text-white text-xs px-2 rounded-full">
+                  12
+                </span>
               </span>
               <span className="text-gray-500 text-xs">0</span>
             </button>
@@ -166,12 +170,18 @@ const Sidebar = () => {
             <span>Projects</span>
             <div className="flex items-center gap-2">
               <FaStar className="text-gray-400" />
-              <FaChevronDown className={`transition-transform ${showProjects ? 'rotate-180' : ''}`} />
+              <FaChevronDown
+                className={`transition-transform ${
+                  showProjects ? "rotate-180" : ""
+                }`}
+              />
             </div>
           </div>
 
           {showProjects && (
-            <div className="mt-2 text-gray-400 italic text-sm px-2">No projects yet</div>
+            <div className="mt-2 text-gray-400 italic text-sm px-2">
+              No projects yet
+            </div>
           )}
         </div>
       </div>
