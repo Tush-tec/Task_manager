@@ -141,7 +141,7 @@ const getTaskForWorker = async (req, res) => {
       { $unwind: "$workerInfo" }, 
       {
         $project: {
-          title: 1,
+          tittle: 1,
           description: 1,
           dueDate: 1,
           status: 1,

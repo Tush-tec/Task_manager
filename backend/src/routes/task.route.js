@@ -16,6 +16,7 @@ router.route("/get-all-task").get(
 )
 
 router.route("/get-task-indi/:workerId").get(
+    authenticateMiddle,
     getTaskForWorker
 )
 

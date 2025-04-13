@@ -6,7 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 
 const UserDashboard = () => {
   const { user } = useAuth();
-  const { getTaskWorker  , task, updateTask, isLoading, taskListCount } = useTask();
+  const { getTaskWorker  , task, isLoading, taskListCount } = useTask();
 
   useEffect(() => {
     if (user?._id) {
@@ -41,7 +41,9 @@ const UserDashboard = () => {
               {task.map((t) => (
                 <Link key={t._id} to={`${t._id}`}>
                   <div className="bg-white dark:bg-zinc-700 bg-opacity-60 dark:bg-opacity-80 backdrop-filter backdrop-blur-lg shadow rounded-xl p-6 hover:shadow-xl transition-all">
-                    <h2 className="font-semibold text-xl text-gray-900 dark:text-white">{t.title}</h2>
+                    <div className='w-90 p-2  border rounded-xl bg-gray-900'>
+                    <h2 className="font-semibold text-xl text-gray-900 dark:text-white ">{t.tittle}</h2>
+                    </div>
                     <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">{t.description}</p>
                     <p className="text-sm mt-3 text-gray-700 dark:text-gray-200">
                       <strong>Due:</strong> {new Date(t.dueDate).toLocaleDateString()}
