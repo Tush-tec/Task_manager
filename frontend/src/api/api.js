@@ -97,9 +97,13 @@ const getTaskforUser= (taskId) =>{
 }
 
 
+const updateTaskStatus= (taskId) => {
+    return apiClient.patch(`/update-task-status/${taskId}`)
+
+}
+
 const updateTaskById = (taskId) => {
-    return apiClient.patch(`/task/update-task-status/${taskId
-    }`)
+    return apiClient.patch(`/task/update-task-status/${taskId}`)
 }
 const updateTaskForUser= (taskId) =>{
 
@@ -129,7 +133,8 @@ export {
     registerWorker,
     loginWorker,
     getAllWorkerFromDB,
-    getTaskById
+    getTaskById,
+    updateTaskStatus
 
 
     
