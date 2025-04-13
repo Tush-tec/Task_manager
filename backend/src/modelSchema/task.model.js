@@ -10,11 +10,11 @@ const taskSchema = new Schema (
             type: String,
             required: true
         },
-        assignedTo:{
+        assignedTo: [{
             type : Schema.Types.ObjectId,
             ref:"Worker",
             required:true
-        },
+        }],
         status : {
             type: String,
             enum: ['pending',"issue", 'in_progress', 'done'],

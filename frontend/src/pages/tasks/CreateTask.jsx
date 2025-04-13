@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { useTask } from '../../context/TaskContext';
-import Input from '../../Component/Input';
-import Loader from '../../Component/Loader';
-import Button from '../../Component/Button';
-import { useAuth } from '../../context/AuthContext';
-import { FaTimes } from 'react-icons/fa';
+import React, { useEffect, useState } from "react";
+import { useTask } from "../../context/TaskContext";
+import Input from "../../Component/Input";
+import Loader from "../../Component/Loader";
+import Button from "../../Component/Button";
+import { useAuth } from "../../context/AuthContext";
+import { FaTimes } from "react-icons/fa";
+import Select from "react-select";
 
 const CreateTask = ({ onClose }) => {
   const { createTask, error, isLoading } = useTask();
   const { fetchWorkers, workers } = useAuth();
 
   const [taskForm, setTaskForm] = useState({
-    tittle: '',
-    description: '',
-    assignedTo: '',
-    dueDate: '',
+    tittle: "",
+    description: "",
+    assignedTo: [],
+    dueDate: "",
   });
 
   const handleChange = (e) => {
@@ -28,10 +29,10 @@ const CreateTask = ({ onClose }) => {
     e.preventDefault();
     await createTask(taskForm);
     setTaskForm({
-      tittle: '',
-      description: '',
-      assignedTo: '',
-      dueDate: '',
+      tittle: "",
+      description: "",
+      assignedTo: [],
+      dueDate: "",
     });
     onClose(); // close after successful creation
   };
@@ -71,19 +72,28 @@ const CreateTask = ({ onClose }) => {
           rows={4}
         />
 
-        <select
+        <Select
+          isMulti
           name="assignedTo"
-          value={taskForm.assignedTo}
-          onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="">Select a worker</option>
-          {workers?.map((worker) => (
-            <option key={worker._id} value={worker._id}>
-              {worker.name || worker.email}
-            </option>
-          ))}
-        </select>
+          options={workers?.map((worker) => ({
+            value: worker._id,
+            label: worker.name || worker.email,
+          }))}
+          value={workers
+            ?.filter((worker) => taskForm.assignedTo.includes(worker._id))
+            .map((worker) => ({
+              value: worker._id,
+              label: worker.name || worker.email,
+            }))}
+          onChange={(selectedOptions) => {
+            setTaskForm({
+              ...taskForm,
+              assignedTo: selectedOptions.map((opt) => opt.value),
+            });
+          }}
+          className="basic-multi-select"
+          classNamePrefix="select"
+        />
 
         <Input
           type="date"
@@ -107,7 +117,7 @@ const CreateTask = ({ onClose }) => {
             className="bg-blue-600  text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition duration-300 disabled:opacity-50"
             disabled={isLoading}
           >
-            {isLoading ? <Loader /> : 'Create Task'}
+            {isLoading ? <Loader /> : "Create Task"}
           </Button>
         </div>
 

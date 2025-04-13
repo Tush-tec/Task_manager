@@ -6,7 +6,7 @@ import { authenticateMiddle, isAdmin,  } from "../middleware/auth.middleware.js"
 const router = Router()
 
 router.route("/create-task", ).post(
-    // authenticateMiddle, isAdmin,
+    authenticateMiddle, isAdmin,
     createTask
 )
 
@@ -16,7 +16,6 @@ router.route("/get-all-task").get(
 )
 
 router.route("/get-task-indi/:workerId").get(
-    authenticateMiddle,
     getTaskForWorker
 )
 

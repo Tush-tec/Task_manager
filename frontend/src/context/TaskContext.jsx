@@ -37,8 +37,13 @@
 
     const createTask = async (data) => {
       setIsLoading(true);
+
+      const task = {
+        ...data,
+        assignedTo: Array.isArray(data.assignedTo) ? data.assignedTo : [data.assignedTo],
+      }
       await requestHandler(
-        () => createTaskforUser(data),
+        () => createTaskforUser(task),
         setIsLoading,
         async (res) => {
           await getTask(); 
