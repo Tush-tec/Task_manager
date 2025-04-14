@@ -2,20 +2,21 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import AdminDashboard from "./dashboard/AdminDashboard";
-import SubAdminDaskboard from "./dashboard/SubAdminDaskboard";
+
 import UserDashboard from "./dashboard/UserDashboard";
+import SubAdminDashboard from "./dashboard/SubAdminDashboard";
 
 const Home = () => {
   const { isAuthenticate, user } = useAuth();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-blue-200 px-4">
+    <div className="">
       {isAuthenticate ? (
          <>
          {user.role === "admin" ? (
            <AdminDashboard />
          ) : user.role === "subAdmin" ? (
-           <SubAdminDaskboard />
+           <SubAdminDashboard />
          ) : (
            <UserDashboard />
          )}

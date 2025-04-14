@@ -19,7 +19,7 @@ import CreateTask from "../pages/tasks/CreateTask";
 const Sidebar = () => {
   const { user, logout } = useAuth();
   const { task } = useTask();
-  const { getSubAdmin } = useSubAdmin();
+  // const { getSubAdmin } = useSubAdmin();
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [showProjects, setShowProjects] = useState(true);
@@ -40,14 +40,14 @@ const Sidebar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Load subadmin data on mount
-  useEffect(() => {
-    getSubAdmin();
-  }, []);
+
+  // useEffect(() => {
+  //   getSubAdmin();
+  // }, []);
 
   const handleLogout = () => {
    logout()
-    // navigate("/login");
+    navigate("/login");
   };
 
   return (
@@ -117,7 +117,7 @@ const Sidebar = () => {
             <button className="p-2 bg-white rounded shadow hover:bg-gray-100">
               <FaSearch />
             </button>
-            {user?.role === "admin" ? (
+            {user?.role === "admin" ||  user.role === "subAdmin" ?(
               <button
                 className="p-2 bg-white rounded shadow hover:bg-gray-100"
                 onClick={() => setShowCreateForm(true)}
@@ -147,7 +147,7 @@ const Sidebar = () => {
           </div>
 
 
-          <div
+          {/* <div
             className="flex items-center justify-between text-sm font-medium text-gray-600 cursor-pointer"
             onClick={() => setShowProjects(!showProjects)}
           >
@@ -159,7 +159,7 @@ const Sidebar = () => {
           </div>
           {showProjects && (
             <div className="mt-2 text-gray-400 italic text-sm px-2">No projects yet</div>
-          )}
+          )} */}
 
           {/* Manage Users (Admin Only) */}
           {user?.role === "admin" && (
@@ -168,7 +168,7 @@ const Sidebar = () => {
                 className="text-sm font-medium text-gray-600 mb-2 cursor-pointer flex justify-between items-center"
                 onClick={() => setShowUserManager(!showUserManager)}
               >
-                <span>Manage Users</span>
+                <span>Manage Worker</span>
                 <FaChevronDown
                   className={`transition-transform duration-200 ${showUserManager ? "rotate-180" : ""}`}
                 />
@@ -176,13 +176,78 @@ const Sidebar = () => {
 
               {showUserManager && (
                 <div className="ml-4 flex flex-col gap-2 text-sm text-gray-700">
+                                      <button
+                    className="text-left px-2 py-1 rounded hover:bg-gray-100"
+                    onClick={() => navigate("/register-worker")}>
+                    Register worker
+                  </button>
+                    <button
+                    className="text-left px-2 py-1 rounded hover:bg-gray-100"
+                    onClick={() => navigate("/remove-worker")}>
+                      Remove worker
+                  </button>
                   <button
                     onClick={() => navigate("/subadmin-manager")}
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
                   >
                     Manage Worker
+                  </button >
+                    <button
+                    className="text-left px-2 py-1 rounded hover:bg-gray-100"
+                    onClick={() => navigate("/task-status")}>
+                    Reporting & Analytics
+                  </button>  
+                    <button
+                    className="text-left px-2 py-1 rounded hover:bg-gray-100"
+                    onClick={() => navigate("/task-status")}>
+                  </button>  
+
+                  {/*  */}
+                  
+                </div>
+              )}
+            </div>
+          )}
+          {user?.role === "admin" && (
+            <div className="mt-6">
+              <div
+                className="text-sm font-medium text-gray-600 mb-2 cursor-pointer flex justify-between items-center"
+                onClick={() => setShowUserManager(!showUserManager)}
+              >
+                <span>Manage Task</span>
+                <FaChevronDown
+                  className={`transition-transform duration-200 ${showUserManager ? "rotate-180" : ""}`}
+                />
+              </div>
+
+              {showUserManager && (
+                <div className="ml-4 flex flex-col gap-2 text-sm text-gray-700">
+                                      <button
+                    className="text-left px-2 py-1 rounded hover:bg-gray-100"
+                    onClick={() => setShowCreateForm(true)}>
+                    create Task
                   </button>
-                  {/* status of task */}
+                    <button
+                    className="text-left px-2 py-1 rounded hover:bg-gray-100"
+                    onClick={() => setShowCreateForm(true)}>
+                      Remove Task 
+                  </button>
+                  <button
+                    onClick={() => navigate("/subadmin-manager")}
+                    className="text-left px-2 py-1 rounded hover:bg-gray-100"
+                  >
+                    Manage Worker
+                  </button >
+                    <button
+                    className="text-left px-2 py-1 rounded hover:bg-gray-100"
+                    onClick={() => navigate("/task-status")}>
+                    Reporting & Analytics
+                  </button>  
+                    <button
+                    className="text-left px-2 py-1 rounded hover:bg-gray-100"
+                    onClick={() => navigate("/task-status")}>
+                  </button>  
+
                   {/*  */}
                   
                 </div>
@@ -206,6 +271,8 @@ const Sidebar = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Add Delete  form here  */}
     </>
   );
 };

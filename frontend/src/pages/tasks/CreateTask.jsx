@@ -34,7 +34,7 @@ const CreateTask = ({ onClose }) => {
       assignedTo: [],
       dueDate: "",
     });
-    onClose(); // close after successful creation
+    onClose(); 
   };
 
   useEffect(() => {
