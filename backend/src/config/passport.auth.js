@@ -6,7 +6,6 @@ import jwt from "jsonwebtoken";
 
 dotenv.config();
 
-console.log("call back", process.env.CALL_BACK_URL);
 
 
 passport.use(
