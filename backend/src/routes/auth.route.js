@@ -40,24 +40,14 @@ router.get(
 
 
 
-router.get("/logout", (req, res) => {
-  res.clearCookie("accessToken");
-  res.clearCookie("refreshToken");
-  res.json({ message: "Logged out" });
-});
-
-
-// router.get("/auth/failed", (req, res) => {
-//   res.status(401).json({ message: "Google login failed" });
-// });
 
 
 
 // ==========
 
 router.post("/register-worker", createWorker)
-router.post('/login-worker', loginWorker)
-router.post(  `/logout/:workerId`, authenticateMiddle, logoutWorker)
+router.post('/login-worker', loginWorker) 
+router.post(  '/logout', authenticateMiddle, logoutWorker)
 router.get('/get-all-worker', authenticateMiddle,  getAllWorker)
 
 

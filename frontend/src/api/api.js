@@ -12,6 +12,7 @@ const apiClient  = axios.create(
 apiClient.interceptors.request.use(
     function (config){
         const token = localStorage.getItem("token")
+        
         config.headers.Authorization = `Bearer ${token}`;
         return config;
     },
@@ -31,7 +32,7 @@ const workerLogin = () => {
 }
 
 const workerLogout = () => {
-    return apiClient.get("/user/logout")
+    return apiClient.post("/user/logout")
 }
 
 

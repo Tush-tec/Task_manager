@@ -12,7 +12,7 @@ router.post("/register", createAdmin);
 router.post("/login", loginAdmin);
 
 
-router.post("/logout",authenticateMiddle , isAdmin, logout);
+router.post("/logout",authenticateMiddle, logout);
 
 router.post("/assign/invites", authenticateMiddle, isAdmin, )
 

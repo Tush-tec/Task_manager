@@ -1,6 +1,6 @@
         import {  createContext, useContext, useEffect, useState } from "react";
         import { requestHandler } from "../utils/accessory";
-        import { getAllWorkerFromDB, loginWorker, registerWorker, workerLoginOrRegisterWithGoogle } from "../api/api";
+        import { getAllWorkerFromDB, loginWorker, registerWorker, workerLoginOrRegisterWithGoogle, workerLogout } from "../api/api";
         import { useNavigate } from "react-router-dom";
         import Loader from "../Component/Loader";
 
@@ -102,15 +102,16 @@
                 setIsloading(true)
 
                 await requestHandler(
-                    async () => logoutWorker(),
+
+                    async () => workerLogout(),
                     setIsloading,
                     ()=>{
+                        localStorage.clear()
+                        
                         setUser(null),
                         setToken(null),
                         setIsAuthenticate(false)
-                        localStorage.clear()
-
-                        navigate(login)
+                        navigate("/login")
                     },
                     (error) =>{
                         console.log(error);
@@ -128,7 +129,7 @@
             
                 if (token && storedUser) {
                     try {
-                        const parsedUser = JSON.parse(storedUser) // ✅ Fix
+                        const parsedUser = JSON.parse(storedUser) 
                         setUser(parsedUser)
                         setToken(token)
                         setIsAuthenticate(true)

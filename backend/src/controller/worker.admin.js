@@ -241,11 +241,21 @@ const loginWorker = async (req,res) => {
 const logoutWorker = async (req,res) =>{
 
    try {
-     const { workerId} = req.params
+     const workerId = req.user?._id
+
+
+     
  
-     if(!isValidObjectId(workerId)){
-         throw new Error(
-             "Invalid worker Id for log out"
+     if(!workerId){
+         return res
+         .status(400)
+         .json(
+            {
+                success: false,
+                status :400,
+                message: "Worker is already logged out",
+                        
+            }
          )
      }
  
@@ -266,18 +276,23 @@ const logoutWorker = async (req,res) =>{
      .clearCookie("accessToken")
      .clearCookie("refreshToken")
      .json(
-         {
-             "message" : "Worker is logout",
-             "status" : 201,
-             "data" : worker
+         {  
+            success:true,
+            status : 201,
+            message : "Worker logged out successfully",
+            data : {worker}
+
          }
      )
    } catch (error) {
 
-    throw new Error(
-        "Error while log out worker",
-        error || error.message
-    )
+    return res
+    .status(500)
+    .json({
+        success: false,
+        status: 500,
+        message: error || error.message
+    })
     
    }
 }

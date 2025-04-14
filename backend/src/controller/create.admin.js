@@ -185,12 +185,14 @@ const logout = async (req, res) => {
         .clearCookie("accessToken", options)
         .clearCookie("refreshToken", options)
         .json({
+          success:true,
           message: `${worker.username} (${worker.email}) logged out successfully`,
           status: 200,
         });
     } catch (error) {
       console.error("Logout error:", error.message);
       return res.status(500).json({
+        success: false,
         message: "Error during logout",
         error: error.message,
       });

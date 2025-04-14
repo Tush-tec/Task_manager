@@ -46,8 +46,8 @@ const Sidebar = () => {
   }, []);
 
   const handleLogout = () => {
-    logout();
-    navigate("/login");
+   logout()
+    // navigate("/login");
   };
 
   return (
@@ -182,6 +182,8 @@ const Sidebar = () => {
                   >
                     Manage Worker
                   </button>
+                  {/* status of task */}
+                  {/*  */}
                   
                 </div>
               )}
