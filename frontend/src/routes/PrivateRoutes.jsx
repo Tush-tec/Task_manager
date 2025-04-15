@@ -22,10 +22,11 @@ const PrivateRoutes = () => {
     <>
 
    <Routes>
+
+    <Route path='/register' element={<Register/>}/>
     <Route path='/dashboard' element = {<Dashboard/>}/>
     <Route path='/' element={<Home/>}/>
     <Route path="/google/success" element={<GoogleSuccess />} />
-    <Route path='/register' element={<Register/>}/>
     <Route path='/login' element={<Login/>} />
     <Route path = '/create-task' element={<CreateTask/>}/>
     <Route path = '/get-task' element={<TaskDetails/> } />

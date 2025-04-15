@@ -190,7 +190,7 @@ const Sidebar = () => {
                 <div className="ml-4 flex flex-col gap-2 text-sm text-gray-700">
                                       <button
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
-                    onClick={() => navigate("/register-worker")}>
+                    onClick={() => navigate("/register")}>
                     Register worker
                   </button>
                     <button
