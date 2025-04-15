@@ -30,10 +30,6 @@ const Sidebar = () => {
   const [ShowDeleteForm, setShowDeleteForm] = useState(false)
   const [showUserManager, setShowUserManager] = useState(false);
   const [showTaskManager, setTaskManager] = useState(false )
-
-
-
-  console.log("user",user);
   
 
   const dropdownRef = useRef(null);
@@ -43,7 +39,7 @@ const Sidebar = () => {
  
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowDropdown(false);
       }
@@ -239,7 +235,10 @@ const Sidebar = () => {
                   </button>
                     <button
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
-                    onClick={() => setShowCreateForm(true)}>
+                    onClick={() => {setShowDeleteForm(true)
+
+                      navigate("/remove-task")
+                    }}>
                       Remove Task 
                   </button>
                   <button
@@ -282,8 +281,8 @@ const Sidebar = () => {
         )}
       </AnimatePresence>
 
-      {/* <AnimatePresence>
-        {showCreateForm && (
+      <AnimatePresence>
+        {ShowDeleteForm && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -294,9 +293,9 @@ const Sidebar = () => {
             <RemoveTask onClose={() => setShowDeleteForm(false)} />
           </motion.div>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence> 
 
-      {/* Add Delete  form here  */}
+      {/* {/* Add Delete  form here  */}
     </>
   );
 };
