@@ -300,7 +300,7 @@ const logoutWorker = async (req,res) =>{
 const getAllWorker = async (req,res) => {
 
    try {
-         const worker= await Worker.find({}, "name email").select("-password")
+         const worker= await Worker.find({}, "username email role createdAt ").select("-password")
  
          if(!worker) {
              return res.status(404).json({
@@ -333,14 +333,67 @@ const getAllWorker = async (req,res) => {
         }
      )
    }
-    
+}
 
+const deleteWorker = async (req,res) => {
+
+    try {
+        const {workerId} = req.params
+    
+        if(!isValidObjectId(workerId)){
+            return res
+            .status(404)
+            .json(
+                {
+                    success: false,
+                    "message" : "Invalid workerId",
+                }
+            )
+        }
+    
+        const worker = await Worker.findByIdAndDelete(
+            workerId
+        )
+    
+        if(!worker) {
+            return res
+            .status(400)
+            .json(
+                {
+                    success : false,
+                    message : "Worker not found",
+                    status : 400
+                }
+            )
+        }
+    
+        return res.status(200).json(
+            {
+                success : true,
+                message : `${worker.email || worker.name} deleted `
+            }
+        )
+    } catch (error) {
+        console.log(error);
+        
+
+        return res
+        .status(500)
+        .json(
+            {
+                success: false,
+                message : error || error.message,
+            }
+        )
+        
+    }
 }
 
 export {
     createWorker,
     loginWorker,
     logoutWorker,
-    getAllWorker
+    getAllWorker,
+    deleteWorker
 }
 

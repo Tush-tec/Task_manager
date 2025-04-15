@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-import { createWorker, getAllWorker, loginWorker, logoutWorker } from "../controller/worker.admin.js";
+import { createWorker, deleteWorker, getAllWorker, loginWorker, logoutWorker } from "../controller/worker.admin.js";
 import { authenticateMiddle } from "../middleware/auth.middleware.js";
 
 
@@ -49,6 +49,7 @@ router.post("/register-worker", createWorker)
 router.post('/login-worker', loginWorker) 
 router.post(  '/logout', authenticateMiddle, logoutWorker)
 router.get('/get-all-worker', authenticateMiddle,  getAllWorker)
+router.delete("/delete-worker/:workerId", deleteWorker)
 
 
 export default router;

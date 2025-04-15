@@ -1,6 +1,6 @@
         import {  createContext, useContext, useEffect, useState } from "react";
         import { requestHandler } from "../utils/accessory";
-        import { getAllWorkerFromDB, loginWorker, registerWorker, workerLoginOrRegisterWithGoogle, workerLogout } from "../api/api";
+        import { deleteWorker, getAllWorkerFromDB, loginWorker, registerWorker, workerLoginOrRegisterWithGoogle, workerLogout } from "../api/api";
         import { useNavigate } from "react-router-dom";
         import Loader from "../Component/Loader";
 
@@ -11,6 +11,7 @@
                 register : async () =>{},
                 login : async () => {},
                 logout : async () => {},
+                fetchAndDeleteWorker: async () => {},
                 fetchWorkers : async () => {}
             }
         )
@@ -96,6 +97,21 @@
                   setError(error);
                 }
               };
+
+              const fetchAndDeleteWorker = async (workerId) => {
+                setIsloading(true);
+              
+                await requestHandler(
+                  async () => deleteWorker(workerId),
+                  setIsloading,
+                  () => {
+
+                    setWorkers((prev) => prev.filter((w) => w._id !== workerId));
+                  },
+                  (err) => setError(err)
+                );
+              };
+              
               
             const logout =async () => {
 
@@ -155,6 +171,7 @@
                         login,
                         logout,
                         fetchWorkers,
+                        fetchAndDeleteWorker,
                         setUser,             
                         setToken,           
                         setIsAuthenticate  

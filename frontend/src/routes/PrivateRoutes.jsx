@@ -14,6 +14,7 @@ import UserDashboard from '../pages/dashboard/UserDashboard'
 import FindTaks from '../pages/tasks/FindTaks'
 import SubAdminManager from '../pages/SubAdmin/SubAdminManager'
 import RemoveTask from '../pages/tasks/RemoveTask'
+import RemoveWorker from '../pages/RemoveWorker'
 
 const PrivateRoutes = () => {
   return (
@@ -38,6 +39,7 @@ const PrivateRoutes = () => {
     <Route path='/subadmin-manager' element={<SubAdminManager/>}/>
 
     <Route path='remove-task'  element={<RemoveTask/>}/>
+    <Route path='remove-worker'  element={<RemoveWorker/>}/>
 
         
     </Routes>    

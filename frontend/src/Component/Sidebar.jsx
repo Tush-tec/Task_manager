@@ -16,6 +16,8 @@ import { useTask } from "../context/TaskContext";
 import { useSubAdmin } from "../context/SubAdminContext";
 import CreateTask from "../pages/tasks/CreateTask";
 
+import RemoveTask from "../pages/tasks/RemoveTask";
+
 const Sidebar = () => {
   const { user, logout } = useAuth();
   const { task } = useTask();
@@ -24,12 +26,16 @@ const Sidebar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showProjects, setShowProjects] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [ShowDeleteForm, setShowDeleteForm] = useState(false)
   const [showUserManager, setShowUserManager] = useState(false);
 
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  // Close dropdown on click outside
+  console.log("user", user);
+  
+
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -202,7 +208,7 @@ const Sidebar = () => {
                     onClick={() => navigate("/task-status")}>
                   </button>  
 
-                  {/*  */}
+                  
                   
                 </div>
               )}
@@ -271,6 +277,20 @@ const Sidebar = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* <AnimatePresence>
+        {showCreateForm && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-50 backdrop-blur-sm bg-black/30 flex justify-center items-center"
+          >
+            <RemoveTask onClose={() => setShowDeleteForm(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence> */}
 
       {/* Add Delete  form here  */}
     </>

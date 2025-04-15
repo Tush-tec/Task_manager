@@ -79,7 +79,9 @@ const getAllWorkerFromDB = () => {
     )
 }
 
-
+const deleteWorker = (workerId) => {
+    return apiClient.delete(`/user/delete-worker/${workerId}`)
+}
 const createTaskforUser = (data) => {
         return apiClient.post("/task/create-task", data)
 }
@@ -157,7 +159,8 @@ export {
     updateTaskStatus,
     changeRoleOfWorker,
     fetchAllSubAdmin,
-    fetchManageWorker
+    fetchManageWorker,
+    deleteWorker
 
 
     
