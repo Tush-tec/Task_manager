@@ -496,7 +496,7 @@ const deleteTask = async (req, res) => {
   }
 };
 
-const taskProgress = async (req, res) => {
+const taskProgressForWorkers = async (req, res) => {
 
   try {
     const { workerId } = req.params;
@@ -573,6 +573,130 @@ const taskProgress = async (req, res) => {
   }
 };
 
+
+const taskProgressForAdmin = async (req, res) => {
+  try {
+    const getWorkers = await Worker.find({ role: "worker" }, "_id name email");
+
+    if (!getWorkers.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No workers found",
+      });
+    }
+
+    const task = await Task.aggregate([
+      {
+        $match: {
+          assignedTo: {
+            $in: getWorkers.map((w) => w._id),
+          },
+        },
+      },
+      {
+        $facet: {
+          totalTasks: [
+            {
+              $group: {
+                _id: "$assignedTo",
+                total: { $sum: 1 },
+              },
+            },
+          ],
+          statusCounts: [
+            {
+              $group: {
+                _id: {
+                  assignedTo: "$assignedTo",
+                  status: "$status",
+                },
+                count: { $sum: 1 },
+              },
+            },
+          ],
+          overDueTask: [
+            {
+              $match: {
+                dueDate: { $lte: new Date() },
+                status: { $ne: "done" },
+              },
+            },
+            {
+              $group: {
+                _id: "$assignedTo",
+                overDue: { $sum: 1 },
+              },
+            },
+          ],
+        },
+      },
+    ]);
+
+    const totalsMap = task[0].totalTasks.reduce((acc, { _id, total }) => {
+      acc[_id.toString()] = total;
+      return acc;
+    }, {});
+
+    const overdueMap = task[0].overDueTask.reduce((acc, { _id, overDue }) => {
+      acc[_id.toString()] = overDue;
+      return acc;
+    }, {});
+
+    const statusMap = task[0].statusCounts.reduce((acc, { _id, count }) => {
+      const workerId = _id.assignedTo.toString();
+      const status = _id.status;
+
+      if (!acc[workerId]) {
+        acc[workerId] = {
+          done: 0,
+          working: 0,
+          issue: 0,
+          pending: 0,
+        };
+      }
+
+      acc[workerId][status] = count;
+      return acc;
+    }, {});
+
+    const result = getWorkers.map((worker) => {
+      const id = worker._id.toString();
+      const total = totalsMap[id] || 0;
+      const overDue = overdueMap[id] || 0;
+      const statusData = statusMap[id] || {
+        done: 0,
+        working: 0,
+        issue: 0,
+        pending: 0,
+      };
+      const progress = total > 0 ? Math.round((statusData.done / total) * 100) : 0;
+
+      return {
+        workerId: id,
+        name: worker.name,
+        email: worker.email,
+        total,
+        overDue,
+        ...statusData,
+        progress,
+      };
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "All worker task progress fetched successfully",
+      data: result,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+      data: {},
+    });
+  }
+};
+
+
 export {
   createTask,
   assignMultipleWorkerToATask,
@@ -582,5 +706,6 @@ export {
   updateTaskById,
   updateTaskStatus,
   deleteTask,
-  taskProgress
+  taskProgressForWorkers,
+  taskProgressForAdmin
 };

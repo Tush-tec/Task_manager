@@ -242,7 +242,7 @@ const Sidebar = () => {
                       Remove Task 
                   </button>
                   <button
-                    onClick={() => navigate("/task-progress")}
+                    onClick={() => navigate(`/task-progress`)}
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
                   >
                    Task Progress

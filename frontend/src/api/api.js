@@ -135,6 +135,13 @@ const fetchManageWorker = async (page = 1, limit = 10) => {
     return apiClient.get(`/admin/manage-worker?page=${page}&limit=${limit}`);
 };
 
+const getTaskProgress = async (workerId) => {
+    return apiClient.get(`/task/get-stats/${workerId}`)
+}
+const getTaskProgressForAdmin = async () => {
+    return apiClient.get(`/task/get-stats`)
+}
+
 
 
 export {
@@ -160,7 +167,9 @@ export {
     changeRoleOfWorker,
     fetchAllSubAdmin,
     fetchManageWorker,
-    deleteWorker
+    deleteWorker,
+    getTaskProgress,
+    getTaskProgressForAdmin
 
 
     

@@ -5,6 +5,8 @@
     getAllTask,
     getTaskById,
     getTaskforUser,
+    getTaskProgress,
+    getTaskProgressForAdmin,
     updateTaskForUser,
     updateTaskStatus,
   } from "../api/api"
@@ -19,7 +21,9 @@
     getTaskWorker: async () => {},
     updateStatusForTask : async () => {},
     updateTask: async () => {},
-    deleteTask: async () => {}
+    deleteTask: async () => {},
+    taskProgress : async () => {},
+    taskProgressForAdmin :  async () => {}
   })
 
 
@@ -162,6 +166,42 @@
       )
     }
 
+    const taskProgress = async (workerId) => {
+
+      // setIsLoading(true)
+      // await requestHandler(
+      //   () => getTaskProgress(workerId) ,
+      //   setIsLoading,
+      //   (res) =>{ 
+      //     console.log(res);
+
+      //     setTask(res.data)
+      //     setError(null)
+      //   },
+      //   (err) => {
+      //     setError(err) 
+      //   }
+      // )
+    }
+
+    const taskProgressForAdmin = async () => {
+
+      setIsLoading(true)
+      await requestHandler(
+        () => getTaskProgressForAdmin() ,
+        setIsLoading,
+        (res) =>{ 
+          console.log("res from admin task", res);
+
+          setTask(res.data)
+          setError(null)
+        },
+        (err) => {
+          setError(err) 
+        }
+      )
+    }
+
     return (
       <taskContext.Provider
         value={{
@@ -179,7 +219,9 @@
           getTaskWorker,
           updateStatusForTask,
           updateTask,
-          deleteTask
+          deleteTask,
+          taskProgress,
+          taskProgressForAdmin
         }}
       >
 
