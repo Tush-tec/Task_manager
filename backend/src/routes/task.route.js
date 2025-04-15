@@ -40,9 +40,11 @@ router.route("/delete-task/:taskId").delete(
 )
 
 router.route("/get-stats/:workerId").get(
+    authenticateMiddle,
     taskProgressForWorkers
 )
 router.route("/get-stats/").get(
+    authenticateMiddle,
     taskProgressForAdmin
 )
 
