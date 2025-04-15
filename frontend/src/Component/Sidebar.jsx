@@ -29,6 +29,7 @@ const Sidebar = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [ShowDeleteForm, setShowDeleteForm] = useState(false)
   const [showUserManager, setShowUserManager] = useState(false);
+  const [showTaskManager, setTaskManager] = useState(false )
 
 
 
@@ -37,7 +38,6 @@ const Sidebar = () => {
 
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
-
 
 
  
@@ -53,9 +53,7 @@ const Sidebar = () => {
   }, []);
 
 
-  // useEffect(() => {
-  //   getSubAdmin();
-  // }, []);
+
 
   const handleLogout = () => {
    logout()
@@ -224,15 +222,15 @@ const Sidebar = () => {
             <div className="mt-6">
               <div
                 className="text-sm font-medium text-gray-600 mb-2 cursor-pointer flex justify-between items-center"
-                onClick={() => setShowUserManager(!showUserManager)}
+                onClick={() => setTaskManager(!showTaskManager)}
               >
                 <span>Manage Task</span>
                 <FaChevronDown
-                  className={`transition-transform duration-200 ${showUserManager ? "rotate-180" : ""}`}
+                  className={`transition-transform duration-200 ${showTaskManager ? "rotate-180" : ""}`}
                 />
               </div>
 
-              {showUserManager && (
+              {showTaskManager && (
                 <div className="ml-4 flex flex-col gap-2 text-sm text-gray-700">
                                       <button
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
@@ -248,12 +246,12 @@ const Sidebar = () => {
                     onClick={() => navigate("/subadmin-manager")}
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
                   >
-                    Manage Worker
+                   Task Progress
                   </button >
                     <button
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
                     onClick={() => navigate("/task-status")}>
-                    Reporting & Analytics
+                    Task Stats
                   </button>  
                     <button
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
