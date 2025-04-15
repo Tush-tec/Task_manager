@@ -19,8 +19,9 @@ import CreateTask from "../pages/tasks/CreateTask";
 import RemoveTask from "../pages/tasks/RemoveTask";
 
 const Sidebar = () => {
-  const { user, logout } = useAuth();
+  const { user ,logout } = useAuth();
   const { task } = useTask();
+
   // const { getSubAdmin } = useSubAdmin();
 
   const [showDropdown, setShowDropdown] = useState(false);
@@ -29,12 +30,17 @@ const Sidebar = () => {
   const [ShowDeleteForm, setShowDeleteForm] = useState(false)
   const [showUserManager, setShowUserManager] = useState(false);
 
+
+
+  console.log("user",user);
+  
+
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  console.log("user", user);
-  
 
+
+ 
 
   useEffect(() => {
     const handleClickOutside = (event) => {

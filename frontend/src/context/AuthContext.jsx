@@ -29,6 +29,7 @@
             const [workers, setWorkers] = useState(null)
             const [token, setToken] =useState(null)
             const [isAuthenticate, setIsAuthenticate] = useState(false)
+            const [ready, setIsReady] = useState(false)
             const navigate = useNavigate()
 
 
@@ -140,22 +141,22 @@
 
 
             useEffect(() => {
-                const token = localStorage.getItem("token")
-                const storedUser = localStorage.getItem("user")
-            
+                const token = localStorage.getItem("token");
+                const storedUser = localStorage.getItem("user");
+              
                 if (token && storedUser) {
-                    try {
-                        const parsedUser = JSON.parse(storedUser) 
-                        setUser(parsedUser)
-                        setToken(token)
-                        setIsAuthenticate(true)
-                    } catch (e) {
-                        console.error("Failed to parse user from localStorage:", e)
-                    }
-                } else {
-                    console.warn("Token not found or invalid user")
+                  try {
+                    const parsedUser = JSON.parse(storedUser);
+                    setUser(parsedUser);
+                    setToken(token);
+                    setIsAuthenticate(true);
+                  } catch (e) {
+                    console.error("Failed to parse user from localStorage:", e);
+                  }
                 }
-            }, [])
+              
+              }, []);
+              
             
 
             return (

@@ -1,84 +1,94 @@
-import React, { useEffect, useState } from 'react'
-import { useAuth } from '../context/AuthContext'
-import Sidebar from '../Component/Sidebar'
+import React, { useEffect, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+import Sidebar from '../Component/Sidebar';
 import { FaTrash } from 'react-icons/fa';
 
 const RemoveWorker = () => {
-    const { fetchWorkers, fetchAndDeleteWorker, workers } = useAuth();
-    const [searchTerm, setSearchTerm] = useState("");
-  
-    useEffect(() => {
-      fetchWorkers();
-    }, []);
-  
-    const handleDelete = async (id) => {
-      await fetchAndDeleteWorker(id);  // ← Clean and uses context
-    };
-  
-    const filteredWorkers = workers?.filter((worker) =>
-      worker.role === 'worker' &&
+  const { fetchWorkers, fetchAndDeleteWorker, workers } = useAuth();
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    fetchWorkers();
+  }, []);
+
+  const handleDelete = async (id) => {
+    await fetchAndDeleteWorker(id);
+  };
+
+  const filteredWorkers = workers?.filter(
+    (worker) =>
+      (worker.role === "worker" || worker.role === "subAdmin") &&
       (worker.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
         worker.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         worker.role.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
-  
-    return (
-      <div className="p-6">
-        <h2 className="text-2xl font-semibold mb-4">All Workers</h2>
-  
-        <input
-          type="text"
-          placeholder="Search by name, email or role..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="p-2 border border-gray-300 rounded-md w-full mb-4"
-        />
-  
-        <div className="overflow-x-auto">
-          <table className="min-w-full table-auto border border-gray-300">
-            <thead>
-              <tr className="bg-gray-100 text-left">
-                <th className="p-2 border">Username</th>
-                <th className="p-2 border">Email</th>
-                <th className="p-2 border">Role</th>
-                <th className="p-2 border">Created At</th>
-                <th className="p-2 border">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredWorkers?.map((worker) => (
-                <tr key={worker._id} className="hover:bg-gray-50">
-                  <td className="p-2 border">{worker.username}</td>
-                  <td className="p-2 border">{worker.email}</td>
-                  <td className="p-2 border capitalize">{worker.role}</td>
-                  <td className="p-2 border">
-                    {new Date(worker.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="p-2 border text-red-600">
-                    <button
-                      onClick={() => handleDelete(worker._id)}
-                      className="hover:text-red-800"
-                      title="Delete Worker"
-                    >
-                      <FaTrash />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-  
-              {filteredWorkers?.length === 0 && (
-                <tr>
-                  <td colSpan="5" className="p-4 text-center text-gray-500">
-                    No matching workers found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
-  };
-  
+  );
 
-export default RemoveWorker
+  return (
+    <div className="flex min-h-screen bg-gray-50">
+
+      <aside className="w-64 bg-white shadow-md border-r border-gray-200">
+        <Sidebar />
+      </aside>
+
+
+      <main className="flex-1 p-6">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-3xl font-bold text-gray-800 mb-6">Manage Workers</h1>
+
+          <input
+            type="text"
+            placeholder="Search by name, email, or role..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full p-3 mb-6 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <div className="overflow-auto bg-white shadow rounded-xl">
+            <table className="min-w-full table-auto text-sm">
+              <thead className="bg-blue-50 text-gray-700 uppercase tracking-wider">
+                <tr>
+                  <th className="px-4 py-3 border-b">Username</th>
+                  <th className="px-4 py-3 border-b">Email</th>
+                  <th className="px-4 py-3 border-b">Role</th>
+                  <th className="px-4 py-3 border-b">Created At</th>
+                  <th className="px-4 py-3 border-b text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredWorkers?.map((worker) => (
+                  <tr key={worker._id} className="hover:bg-gray-50">
+                    <td className="px-4 py-3 border-b">{worker.username}</td>
+                    <td className="px-4 py-3 border-b">{worker.email}</td>
+                    <td className="px-4 py-3 border-b capitalize">{worker.role}</td>
+                    <td className="px-4 py-3 border-b">
+                      {new Date(worker.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-3 border-b text-center">
+                      <button
+                        onClick={() => handleDelete(worker._id)}
+                        className="text-red-500 hover:text-red-700 transition-colors duration-150"
+                        title="Delete Worker"
+                      >
+                        <FaTrash />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+
+                {filteredWorkers?.length === 0 && (
+                  <tr>
+                    <td colSpan="5" className="text-center py-6 text-gray-400">
+                      No matching workers found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default RemoveWorker;
