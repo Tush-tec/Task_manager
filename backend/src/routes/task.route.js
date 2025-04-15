@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createTask, deleteTask, getAllTasks, getTaskById, getTaskForWorker, updateTaskById, updateTaskStatus } from "../controller/task.controller.js";
+import { createTask, deleteTask, getAllTasks, getTaskById, getTaskForWorker, taskProgress, updateTaskById, updateTaskStatus } from "../controller/task.controller.js";
 import { authenticateMiddle, isAdmin,  } from "../middleware/auth.middleware.js";
 
 
@@ -37,6 +37,10 @@ router.route("/update-task-status/:taskId").patch(
 router.route("/delete-task/:taskId").delete(
     authenticateMiddle,
     deleteTask
+)
+
+router.route("/get-stats/:workerId").get(
+    taskProgress
 )
 
 export default router

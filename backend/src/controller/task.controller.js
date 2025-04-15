@@ -496,6 +496,83 @@ const deleteTask = async (req, res) => {
   }
 };
 
+const taskProgress = async (req, res) => {
+
+  try {
+    const { workerId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(workerId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid worker ID",
+      });
+    }
+
+    const task = await Task.aggregate([
+      {
+        $match: { assignedTo: new mongoose.Types.ObjectId(workerId) },
+      },
+      {
+        $facet: {
+          totalTask: [{ $count: "count" }],
+          statusCount: [
+            {
+              $group: {
+                _id: "$status",
+                count: { $sum: 1 },
+              },
+            },
+          ],
+          overDueTask: [
+            {
+              $match: {
+                dueDate: { $lte: new Date() },
+                status: { $ne: "done" },
+              },
+            },
+            { $count: "count" },
+          ],
+        },
+      },
+    ]);
+
+    const total = task[0].totalTask[0]?.count || 0;
+    const overDue = task[0].overDueTask[0]?.count || 0;
+
+    const statusData = task[0].statusCount.reduce(
+      (acc, curr) => {
+        acc[curr._id] = curr.count;
+        return acc;
+      },
+      {
+        done: 0,
+        working: 0,
+        issue: 0,
+        pending: 0,
+      }
+    );
+
+    const progress = total > 0 ? Math.round((statusData.done / total) * 100) : 0;
+
+    return res.status(200).json({
+      success: true,
+      message: `Here is your task progress data`,
+      data: {
+        total,
+        overDue,
+        ...statusData,
+        progress,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Something went wrong",
+      data: {},
+    });
+  }
+};
+
 export {
   createTask,
   assignMultipleWorkerToATask,
@@ -505,4 +582,5 @@ export {
   updateTaskById,
   updateTaskStatus,
   deleteTask,
+  taskProgress
 };
