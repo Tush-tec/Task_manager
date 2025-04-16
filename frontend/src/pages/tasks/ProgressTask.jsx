@@ -22,6 +22,9 @@ const ProgressTask = () => {
     taskProgressForAdmin();
   }, []);
 
+  const safeTaskArray = Array.isArray(task) ? task : [];
+
+
   return (
     <div className="flex h-screen overflow-hidden">
       <aside className="w-64 bg-white shadow-md border-r flex-shrink-0">
@@ -34,7 +37,7 @@ const ProgressTask = () => {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {task.map((worker, index) => {
+          {safeTaskArray.map((worker, index) => {
             const hasTasks = worker.total > 0;
             const chartData = STATUS_KEYS.filter((key) => worker[key] > 0).map(
               (key) => ({

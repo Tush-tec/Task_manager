@@ -196,8 +196,7 @@
           () => getTaskProgressForAdmin() ,
           setIsLoading,
           (res) =>{ 
-            console.log("res from admin task", res);
-
+            
             setTask(res.data)
             setError(null)
           },
