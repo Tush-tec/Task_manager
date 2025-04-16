@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createTask, deleteTask, getAllTasks, getTaskById, getTaskForWorker, taskProgressForAdmin, taskProgressForWorkers, updateTaskById, updateTaskStatus } from "../controller/task.controller.js";
+import { createTask, deleteTask, getAllTasks, getTaskById, getTaskForWorker, taskProgressForAdmin, taskProgressForWorkers, TaskStatusFilter, updateTaskById, updateTaskStatus } from "../controller/task.controller.js";
 import { authenticateMiddle, isAdmin,  } from "../middleware/auth.middleware.js";
 
 
@@ -47,5 +47,11 @@ router.route("/get-stats").get(
     authenticateMiddle,
     taskProgressForAdmin
 )
+
+router.route("/task-status/:workerId").get(
+    authenticateMiddle,
+    TaskStatusFilter
+)
+
 
 export default router

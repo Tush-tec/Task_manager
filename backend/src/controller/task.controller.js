@@ -14,7 +14,10 @@ const createTask = async (req, res) => {
       });
     }
 
-    if (!assignedTo || (typeof assignedTo !== "string" && !Array.isArray(assignedTo))) {
+    if (
+      !assignedTo ||
+      (typeof assignedTo !== "string" && !Array.isArray(assignedTo))
+    ) {
       return res.status(400).json({
         success: false,
         message: "Please assign at least one user using a valid email or ID.",
@@ -89,11 +92,10 @@ const createTask = async (req, res) => {
       task: populatedTask,
     });
   } catch (error) {
-
     return res.status(500).json({
-        success: false,
-        message: "Internal Server Error",
-        error: error.message || error
+      success: false,
+      message: "Internal Server Error",
+      error: error.message || error,
     });
   }
 };
@@ -171,23 +173,19 @@ const getAllTasks = async (req, res) => {
       });
     }
 
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "Task is Retrieved",
-        status: 200,
-        task: task,
-      });
+    return res.status(200).json({
+      success: true,
+      message: "Task is Retrieved",
+      status: 200,
+      task: task,
+    });
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        success: false,
-        message: "Failed to retrieve task",
-        status: 500,
-        error: error.message,
-      });
+    return res.status(500).json({
+      success: false,
+      message: "Failed to retrieve task",
+      status: 500,
+      error: error.message,
+    });
   }
 };
 
@@ -497,7 +495,6 @@ const deleteTask = async (req, res) => {
 };
 
 const taskProgressForWorkers = async (req, res) => {
-
   try {
     const { workerId } = req.params;
 
@@ -552,7 +549,8 @@ const taskProgressForWorkers = async (req, res) => {
       }
     );
 
-    const progress = total > 0 ? Math.round((statusData.done / total) * 100) : 0;
+    const progress =
+      total > 0 ? Math.round((statusData.done / total) * 100) : 0;
 
     return res.status(200).json({
       success: true,
@@ -572,7 +570,6 @@ const taskProgressForWorkers = async (req, res) => {
     });
   }
 };
-
 
 const taskProgressForAdmin = async (req, res) => {
   try {
@@ -669,7 +666,8 @@ const taskProgressForAdmin = async (req, res) => {
         issue: 0,
         pending: 0,
       };
-      const progress = total > 0 ? Math.round((statusData.done / total) * 100) : 0;
+      const progress =
+        total > 0 ? Math.round((statusData.done / total) * 100) : 0;
 
       return {
         workerId: id,
@@ -695,6 +693,117 @@ const taskProgressForAdmin = async (req, res) => {
   }
 };
 
+const TaskStatusFilter= async (req, res) => {
+  try {
+    const {
+      workerId
+    } = req.params;
+    const { status } = req.query
+
+    const validStatuses = new Set(['pending', 'in_progress', 'done', 'issue']);
+
+
+
+
+    if(!
+      workerId
+    ) {
+      return res.status(
+        400
+      ).json({
+        success: false,
+        message: "Task ID is required",
+      })
+    }
+
+    if (!status) {
+      return res.status(400).json({
+        success: false,
+        message: "status is required",
+      });
+    }
+
+
+
+
+    const handleMultipleStatus =  status.split(',')
+
+
+    const checkForValidStatus = handleMultipleStatus.some(s => !validStatuses.has(s))
+
+    if(checkForValidStatus){
+      return res.status(400).json({
+        success: false,
+        message: `Invalid status values: ${handleMultipleStatus.filter(s => !validStatuses.has(s)).join(', ')}`
+        });
+    }
+
+
+    const findTaskStatus = await Task.aggregate([
+      {
+        $match: {
+          assignedTo: new mongoose.Types.ObjectId(
+            workerId
+          ),
+          
+          status  :{
+          $in : handleMultipleStatus
+        }
+
+        }
+      },
+      {
+        $unwind : "$assignedTo"
+      },
+      {
+        $lookup :{
+          from : "workers",
+          localField : "assignedTo",
+          foreignField: "_id",
+          as : "workerDetails"
+        }
+      },
+      {
+        $unwind : "$workerDetails"
+      },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          description: 1,
+          status: 1,
+          dueDate: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          assignedTo: 1,
+          workerEmail: "$workerDetails.email",
+          workerName: "$workerDetails.username"
+        },
+      },
+    ]);
+
+    console.log(findTaskStatus)
+    
+
+    if (findTaskStatus.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No tasks found with the provided taskId and status",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: findTaskStatus,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Error fetching task status",
+    });
+  }
+};
+
 
 export {
   createTask,
@@ -706,5 +815,6 @@ export {
   updateTaskStatus,
   deleteTask,
   taskProgressForWorkers,
-  taskProgressForAdmin
+  taskProgressForAdmin,
+  TaskStatusFilter
 };
