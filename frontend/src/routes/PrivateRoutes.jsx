@@ -18,6 +18,8 @@ import RemoveWorker from '../pages/RemoveWorker'
 import ProgressTask from '../pages/tasks/ProgressTask'
 import TaskProgress from '../pages/tasks/TaskProgress'
 
+import QueryTask from '../pages/tasks/QueryTask'
+
 const PrivateRoutes = () => {
   return (
 
@@ -46,6 +48,7 @@ const PrivateRoutes = () => {
     <Route path='/task-progress' element={<ProgressTask/>}/>
     
     <Route path= '/task-progress/task/:workerId' element={<TaskProgress/>}/>
+    <Route path="/task-progress/task-filter/:workerId" element={<QueryTask />} />
 
         
     </Routes>    

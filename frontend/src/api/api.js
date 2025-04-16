@@ -144,9 +144,10 @@ const getTaskProgressForAdmin = async () => {
 }
 
 const getTaskFilter = async (workerId, status) => {
-    const statusQuery = status.join(",")
-    return apiClient.get(`/task/task-status/${workerId}?status=${statusQuery}`);
-}
+    const statusQuery = Array.isArray(status) ? status.join(",") : status || "";
+  return apiClient.get(`/task/task-status/${workerId}?status=${statusQuery}`);
+};
+  
 
 
 export {

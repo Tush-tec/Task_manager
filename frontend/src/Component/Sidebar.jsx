@@ -20,7 +20,7 @@ import RemoveTask from "../pages/tasks/RemoveTask";
 import { Loader } from "lucide-react";
 
 const Sidebar = () => {
-  const { user, isAuthenticate, ready } = useAuth();
+  const { user, isAuthenticate, ready, logout } = useAuth();
 
   const { task } = useTask();
 
@@ -62,7 +62,7 @@ const Sidebar = () => {
   };
 
   if (!ready) return <Loader/>
-  if (!isAuthenticate) return navigate="/login" 
+  if (!isAuthenticate) return navigate("/login")
 
   return (
     <>

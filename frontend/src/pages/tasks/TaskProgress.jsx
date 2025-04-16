@@ -46,7 +46,7 @@ const TaskProgress = () => {
 
   const handleClick = (data) => {
     if (data?.payload?.key) {
-      navigate(`/tasks/${workerId}/${data.payload.key}`);
+      navigate(`/task-progress/task-filter/${workerId}?status=${data.payload.key}`);
     }
   };
 
@@ -165,7 +165,10 @@ const TaskProgress = () => {
                 visible: { opacity: 1, y: 0 },
               }}
               className="bg-gradient-to-br from-white to-gray-50 border border-gray-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition cursor-pointer"
-              onClick={() => navigate(`/tasks/${workerId}/${status.key}`)}
+              onClick={() => navigate(`/task-progress/task-filter/${workerId}?status=${status.key}`)}
+
+                  // /task-progress/task-filter/:workerId
+
             >
               <h2 className="text-sm font-medium text-gray-500 mb-2 uppercase tracking-wide">
                 {status.name}

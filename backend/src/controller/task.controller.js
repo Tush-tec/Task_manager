@@ -693,27 +693,18 @@ const taskProgressForAdmin = async (req, res) => {
   }
 };
 
-const TaskStatusFilter= async (req, res) => {
+const TaskStatusFilter = async (req, res) => {
   try {
-    const {
-      workerId
-    } = req.params;
-    const { status } = req.query
+    const { workerId } = req.params;
+    const { status } = req.query;
 
-    const validStatuses = new Set(['pending', 'in_progress', 'done', 'issue']);
+    const validStatuses = new Set(["pending", "in_progress", "done", "issue"]);
 
-
-
-
-    if(!
-      workerId
-    ) {
-      return res.status(
-        400
-      ).json({
+    if (!workerId) {
+      return res.status(400).json({
         success: false,
         message: "Task ID is required",
-      })
+      });
     }
 
     if (!status) {
@@ -723,53 +714,49 @@ const TaskStatusFilter= async (req, res) => {
       });
     }
 
+    const handleMultipleStatus = status.split(",");
 
+    const checkForValidStatus = handleMultipleStatus.some(
+      (s) => !validStatuses.has(s)
+    );
 
-
-    const handleMultipleStatus =  status.split(',')
-
-
-    const checkForValidStatus = handleMultipleStatus.some(s => !validStatuses.has(s))
-
-    if(checkForValidStatus){
+    if (checkForValidStatus) {
       return res.status(400).json({
         success: false,
-        message: `Invalid status values: ${handleMultipleStatus.filter(s => !validStatuses.has(s)).join(', ')}`
-        });
+        message: `Invalid status values: ${handleMultipleStatus
+          .filter((s) => !validStatuses.has(s))
+          .join(", ")}`,
+      });
     }
-
 
     const findTaskStatus = await Task.aggregate([
       {
         $match: {
-          assignedTo: new mongoose.Types.ObjectId(
-            workerId
-          ),
-          
-          status  :{
-          $in : handleMultipleStatus
-        }
+          assignedTo: new mongoose.Types.ObjectId(workerId),
 
-        }
+          status: {
+            $in: handleMultipleStatus,
+          },
+        },
       },
       {
-        $unwind : "$assignedTo"
+        $unwind: "$assignedTo",
       },
       {
-        $lookup :{
-          from : "workers",
-          localField : "assignedTo",
+        $lookup: {
+          from: "workers",
+          localField: "assignedTo",
           foreignField: "_id",
-          as : "workerDetails"
-        }
+          as: "workerDetails",
+        },
       },
       {
-        $unwind : "$workerDetails"
+        $unwind: "$workerDetails",
       },
       {
         $project: {
           _id: 1,
-          title: 1,
+          tittle: 1,
           description: 1,
           status: 1,
           dueDate: 1,
@@ -777,13 +764,12 @@ const TaskStatusFilter= async (req, res) => {
           updatedAt: 1,
           assignedTo: 1,
           workerEmail: "$workerDetails.email",
-          workerName: "$workerDetails.username"
+          workerName: "$workerDetails.username",
         },
       },
     ]);
 
-    console.log(findTaskStatus)
-    
+    console.log(findTaskStatus);
 
     if (findTaskStatus.length === 0) {
       return res.status(404).json({
@@ -804,7 +790,6 @@ const TaskStatusFilter= async (req, res) => {
   }
 };
 
-
 export {
   createTask,
   assignMultipleWorkerToATask,
@@ -816,5 +801,5 @@ export {
   deleteTask,
   taskProgressForWorkers,
   taskProgressForAdmin,
-  TaskStatusFilter
+  TaskStatusFilter,
 };
