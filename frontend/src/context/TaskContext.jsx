@@ -213,7 +213,7 @@
         setIsLoading(true);
       
         await requestHandler(
-          () => getTaskFilter(workerId, status),
+        async () => await getTaskFilter(workerId, status),
           setIsLoading,
           (res) => {
             console.log("res is", res);
