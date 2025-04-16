@@ -4,7 +4,7 @@ import TaskDetails from "../tasks/TaskDetails";
 
 const AdminDashboard = () => {
   return (
-    <div className="flex h-screen bg-gray-900">
+    <div className="flex h-screen ">
 
       <aside className="w-64 border-r border-gray-700 hidden md:block">
         <Sidebar />

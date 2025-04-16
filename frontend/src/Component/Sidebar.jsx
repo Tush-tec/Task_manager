@@ -45,7 +45,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setShowDropdown(false);
       }
     };
@@ -146,22 +146,14 @@ const Sidebar = () => {
           </div>
 
 
-          <div className="text-sm font-medium text-gray-600 mb-2">My Tasks</div>
-          <div className="flex flex-col gap-1 text-sm mb-6">
-            <Link to="/user">
-              <button className="flex items-center justify-between px-2 py-2 rounded hover:bg-gray-100 w-full">
-                <span className="flex items-center gap-2">✅ My tasks</span>
-                <span className="text-gray-500 text-xs">{task.length}</span>
-              </button>
-            </Link>
-            <button className="flex items-center justify-between px-2 py-2 rounded hover:bg-gray-100 w-full">
-              <span className="flex items-center gap-2">📅 Today</span>
-              <span className="text-gray-500 text-xs">0</span>
-            </button>
-          </div>
-
-
-          {/* <div
+            {user.role !== "admin" || "subAdmin" ?(
+              <>
+              
+              </>
+            ) : (
+          <>
+          
+          <div
             className="flex items-center justify-between text-sm font-medium text-gray-600 cursor-pointer"
             onClick={() => setShowProjects(!showProjects)}
           >
@@ -173,8 +165,18 @@ const Sidebar = () => {
           </div>
           {showProjects && (
             <div className="mt-2 text-gray-400 italic text-sm px-2">No projects yet</div>
-          )} */}
+          )}
 
+          
+          </>
+          
+
+            )
+            
+
+            }
+
+          
           {/* Manage Users (Admin Only) */}
           {user?.role === "admin" && (
             <div className="mt-6">
