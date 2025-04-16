@@ -143,6 +143,10 @@ const getTaskProgressForAdmin = async () => {
     return apiClient.get(`/task/get-stats`)
 }
 
+const getTaskFilter = async (workerId, status) => {
+    const statusQuery = status.join(",")
+    return apiClient.get(`/task/task-status/${workerId}?status=${statusQuery}`);
+}
 
 
 export {
@@ -170,7 +174,8 @@ export {
     fetchManageWorker,
     deleteWorker,
     getTaskProgress,
-    getTaskProgressForAdmin
+    getTaskProgressForAdmin,
+    getTaskFilter
 
 
     

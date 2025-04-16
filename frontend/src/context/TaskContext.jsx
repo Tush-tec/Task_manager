@@ -4,6 +4,7 @@
     deleteTaskForUser,
     getAllTask,
     getTaskById,
+    getTaskFilter,
     getTaskforUser,
     getTaskProgress,
     getTaskProgressForAdmin,
@@ -23,7 +24,8 @@
     updateTask: async () => {},
     deleteTask: async () => {},
     taskProgress : async () => {},
-    taskProgressForAdmin :  async () => {}
+    taskProgressForAdmin :  async () => {},
+    getTaskFilter: async () => {}
   })
 
 
@@ -38,6 +40,7 @@
     const [taskListCount, setTaskListCount] = useState(0)
     const [taskListFilter, setTaskListFilter] = useState([])
     const [taskListFilterCount, setTaskListFilterCount] = useState(0)
+    const [filterTask, setFilterTask] = useState(null)
 
     const createTask = async (data) => {
       setIsLoading(true);
@@ -203,6 +206,25 @@
       )
     }
 
+    const taskQuery = async (workerId, status) => {
+
+      setIsLoading(true)
+
+      await requestHandler(
+        () => getTaskFilter(workerId, status),
+        setIsLoading,
+        (res) => {
+          console.log(res)
+          setFilterTask(res.data)
+          setError(null)
+          setIsLoading(false)
+        },
+        (err) => {
+          setError(err)
+        }
+      )
+    }
+
     return (
       <taskContext.Provider
         value={{
@@ -214,6 +236,8 @@
           taskListCount,
           taskListFilter,
           taskListFilterCount,
+          filterTask,
+          setFilterTask,
           createTask,
           getTask,
           getTaskByIdForUser,
@@ -222,7 +246,8 @@
           updateTask,
           deleteTask,
           taskProgress,
-          taskProgressForAdmin
+          taskProgressForAdmin,
+
         }}
       >
 
