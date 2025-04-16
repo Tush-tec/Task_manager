@@ -6,6 +6,7 @@ import {
 } from 'recharts';
 import { UserIcon } from 'lucide-react';
 import Sidebar from '../../Component/Sidebar';
+import { Link } from 'react-router-dom';
 
 const STATUS_KEYS = ['done', 'working', 'pending', 'issue', 'in_progress'];
 const STATUS_COLORS = {
@@ -25,12 +26,12 @@ const ProgressTask = () => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* Sidebar */}
+
       <aside className="w-64 bg-white shadow-md border-r flex-shrink-0">
         <Sidebar />
       </aside>
 
-      {/* Main Content */}
+
       <main className="flex-1 overflow-auto bg-gray-100 p-6">
         <h1 className="text-2xl font-bold mb-6 text-gray-800">Worker Task Progress</h1>
 
@@ -56,13 +57,19 @@ const ProgressTask = () => {
                 <div className="flex items-center gap-3 mb-4">
                   <UserIcon className={`w-6 h-6 ${hasTasks ? 'text-blue-600' : 'text-gray-200'}`} />
                   <div>
+
                     <h2 className={`text-lg font-semibold ${hasTasks ? 'text-gray-800' : 'text-gray-300'}`}>
                       {worker.email}
                     </h2>
+                    <Link to={`/task-progress/task/${worker.workerId}`}>
+
                     <p className={`text-sm ${hasTasks ? 'text-gray-500' : 'text-gray-200'}`}>
                       ID: {worker.workerId}
                     </p>
+                    </Link>
+                    
                   </div>
+                  
                 </div>
 
                 {hasTasks ? (
@@ -91,6 +98,7 @@ const ProgressTask = () => {
 
                     <div className="flex flex-wrap gap-2 mt-2 text-xs text-gray-600">
                       {chartData.map((item) => (
+
                         <div key={item.name} className="flex items-center gap-1">
                           <span
                             className="w-3 h-3 rounded-full inline-block"
@@ -98,6 +106,8 @@ const ProgressTask = () => {
                           ></span>
                           <span>{item.name}</span>
                         </div>
+
+
                       ))}
                     </div>
 
@@ -106,10 +116,12 @@ const ProgressTask = () => {
                       <p className="text-red-500">Overdue: <strong>{worker.overDue}</strong></p>
                       <p>Progress: <strong>{worker.progress}%</strong></p>
                     </div>
+                    
                   </>
                 ) : (
                   <p className="text-center text-gray-400 mt-10 text-sm italic">No tasks assigned</p>
                 )}
+                
               </motion.div>
             );
           })}

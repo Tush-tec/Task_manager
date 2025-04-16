@@ -39,11 +39,11 @@ router.route("/delete-task/:taskId").delete(
     deleteTask
 )
 
-router.route("/get-stats/:workerId").get(
+router.route("/get-task-progress/:workerId").get(
     authenticateMiddle,
     taskProgressForWorkers
 )
-router.route("/get-stats/").get(
+router.route("/get-stats").get(
     authenticateMiddle,
     taskProgressForAdmin
 )

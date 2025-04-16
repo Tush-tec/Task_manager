@@ -690,8 +690,7 @@ const taskProgressForAdmin = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error.message,
-      data: {},
+      message: error.message || error || "something went wrong",
     });
   }
 };

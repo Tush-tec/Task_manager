@@ -168,20 +168,21 @@
 
     const taskProgress = async (workerId) => {
 
-      // setIsLoading(true)
-      // await requestHandler(
-      //   () => getTaskProgress(workerId) ,
-      //   setIsLoading,
-      //   (res) =>{ 
-      //     console.log(res);
+      setIsLoading(true)
+      await requestHandler(
+        () => getTaskProgress(workerId) ,
+        setIsLoading,
+        (res) =>{ 
+          console.log("res from task progress", res)
 
-      //     setTask(res.data)
-      //     setError(null)
-      //   },
-      //   (err) => {
-      //     setError(err) 
-      //   }
-      // )
+
+          setTask(res.data)
+          setError(null)
+        },
+        (err) => {
+          setError(err) 
+        }
+      )
     }
 
     const taskProgressForAdmin = async () => {

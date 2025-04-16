@@ -154,6 +154,7 @@
                     console.error("Failed to parse user from localStorage:", e);
                   }
                 }
+                  setIsReady(true)              
               
               }, []);
               
@@ -175,7 +176,8 @@
                         fetchAndDeleteWorker,
                         setUser,             
                         setToken,           
-                        setIsAuthenticate  
+                        setIsAuthenticate  ,
+                        ready
                     }
                 }>
 

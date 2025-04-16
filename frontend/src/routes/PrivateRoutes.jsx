@@ -16,6 +16,7 @@ import SubAdminManager from '../pages/SubAdmin/SubAdminManager'
 import RemoveTask from '../pages/tasks/RemoveTask'
 import RemoveWorker from '../pages/RemoveWorker'
 import ProgressTask from '../pages/tasks/ProgressTask'
+import TaskProgress from '../pages/tasks/TaskProgress'
 
 const PrivateRoutes = () => {
   return (
@@ -43,6 +44,8 @@ const PrivateRoutes = () => {
     <Route path='/remove-task'  element={<RemoveTask/>}/>
     <Route path='/remove-worker'  element={<RemoveWorker/>}/>
     <Route path='/task-progress' element={<ProgressTask/>}/>
+    
+    <Route path= '/task-progress/task/:workerId' element={<TaskProgress/>}/>
 
         
     </Routes>    

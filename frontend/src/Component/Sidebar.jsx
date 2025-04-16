@@ -17,9 +17,11 @@ import { useSubAdmin } from "../context/SubAdminContext";
 import CreateTask from "../pages/tasks/CreateTask";
 
 import RemoveTask from "../pages/tasks/RemoveTask";
+import { Loader } from "lucide-react";
 
 const Sidebar = () => {
-  const { user ,logout } = useAuth();
+  const { user, isAuthenticate, ready } = useAuth();
+
   const { task } = useTask();
 
   // const { getSubAdmin } = useSubAdmin();
@@ -27,7 +29,7 @@ const Sidebar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showProjects, setShowProjects] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [ShowDeleteForm, setShowDeleteForm] = useState(false)
+  const [ShowDeleteForm, setShowDeleteForm] =   useState(false)
   const [showUserManager, setShowUserManager] = useState(false);
   const [showTaskManager, setTaskManager] = useState(false )
   
@@ -37,6 +39,9 @@ const Sidebar = () => {
 
 
  
+
+
+
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -55,6 +60,9 @@ const Sidebar = () => {
    logout()
     navigate("/login");
   };
+
+  if (!ready) return <Loader/>
+  if (!isAuthenticate) return navigate="/login" 
 
   return (
     <>

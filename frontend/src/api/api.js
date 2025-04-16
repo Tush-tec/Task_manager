@@ -136,7 +136,8 @@ const fetchManageWorker = async (page = 1, limit = 10) => {
 };
 
 const getTaskProgress = async (workerId) => {
-    return apiClient.get(`/task/get-stats/${workerId}`)
+    return apiClient.get(`/task/get-task-progress/${workerId}`);
+       
 }
 const getTaskProgressForAdmin = async () => {
     return apiClient.get(`/task/get-stats`)
