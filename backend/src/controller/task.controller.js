@@ -173,6 +173,8 @@ const getAllTasks = async (req, res) => {
       });
     }
 
+    console.log("task", task);
+    
     return res.status(200).json({
       success: true,
       message: "Task is Retrieved",
@@ -202,10 +204,11 @@ const getTaskForWorker = async (req, res) => {
     }
 
     const matchStage = {
-      assignedTo: new mongoose.Types.ObjectId(workerId),
+      assignedTo: { $in: [new mongoose.Types.ObjectId(workerId)] },
     };
+    
 
-    // Optional filters
+
     if (status) matchStage.status = status;
     if (dueDate) matchStage.dueDate = new Date(dueDate);
     if (projectId && isValidObjectId(projectId)) {
@@ -259,6 +262,8 @@ const getTaskForWorker = async (req, res) => {
         data: [],
       });
     }
+    console.log("task", tasks);
+    
 
     return res.status(200).json({
       success: true,

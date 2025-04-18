@@ -25,40 +25,30 @@ const Sidebar = () => {
 
   const { task } = useTask();
 
-
-  
   const [showDropdown, setShowDropdown] = useState(false);
   const [showProjects, setShowProjects] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [ShowDeleteForm, setShowDeleteForm] =   useState(false)
+  const [ShowDeleteForm, setShowDeleteForm] = useState(false);
   const [showUserManager, setShowUserManager] = useState(false);
-  const [showTaskManager, setTaskManager] = useState(false )
-  const [searchQuery, setIsSearchQuery]  = useState("")
-  const [searchQueryResult, setIsSearchQueryResult]  = useState([]) 
-  
+  const [showTaskManager, setTaskManager] = useState(false);
+  const [searchQuery, setIsSearchQuery] = useState("");
+  const [searchQueryResult, setIsSearchQueryResult] = useState([]);
 
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-
- 
-
-  useEffect(()=>{
-    
-    if(searchQuery.trim() === "") {
-      setIsSearchQueryResult([])
-      return
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setIsSearchQueryResult([]);
+      return;
     }
 
-    const makeLowerQuery = searchQuery.trim().toLowerCase()
+    const makeLowerQuery = searchQuery.trim().toLowerCase();
 
-    const queryResult = task?.filter(
-      (t) => {
-        t.name.toLowerCase().includes(makeLowerQuery)
-      }
-    )
-  }, [searchQuery, task])
-
+    const queryResult = task?.filter((t) => {
+      t.name.toLowerCase().includes(makeLowerQuery);
+    });
+  }, [searchQuery, task]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -70,25 +60,24 @@ const Sidebar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-
-
-
   const handleLogout = () => {
-   logout()
+    logout();
     navigate("/login");
   };
 
-  if (!ready) return <Loader/>
-  if (!isAuthenticate) return navigate("/login")
+  if (!ready) return <Loader />;
+  if (!isAuthenticate) return navigate("/login");
 
   return (
     <>
       <div className="w-64 bg-gray-50 h-screen shadow-sm p-4 flex flex-col justify-between">
-
         <div>
           {user && (
             <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2 relative" ref={dropdownRef}>
+              <div
+                className="flex items-center gap-2 relative"
+                ref={dropdownRef}
+              >
                 {user.picture ? (
                   <img
                     src={user.picture}
@@ -115,7 +104,9 @@ const Sidebar = () => {
 
                 <div
                   className={`absolute top-10 left-0 w-40 bg-white border shadow-lg rounded-md z-10 overflow-hidden transition-all duration-200 transform origin-top-left ${
-                    showDropdown ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+                    showDropdown
+                      ? "opacity-100 scale-100"
+                      : "opacity-0 scale-95 pointer-events-none"
                   }`}
                 >
                   <button
@@ -135,30 +126,33 @@ const Sidebar = () => {
                   </button>
                 </div>
               </div>
-              <button className="p-2 hover:bg-gray-200 rounded" onClick={() => navigate("/tasks")}>
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-gray-600" viewBox="0 0 24 24" fill="currentColor">
+              <button
+                className="p-2 hover:bg-gray-200 rounded"
+                onClick={() => navigate("/tasks")}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-5 h-5 text-gray-600"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
                   <path d="M4 4h16v2H4zm0 6h16v2H4zm0 6h10v2H4z" />
                 </svg>
               </button>
             </div>
-          
           )}
 
-
           <div className="flex items-center justify-between mb-4 px-1">
-            <button className="p-2 bg-white rounded shadow hover:bg-gray-100"
-            >
+            <button className="p-2 bg-white rounded shadow hover:bg-gray-100">
               <FaSearch />
             </button>
-            <button className="p-2 bg-white rounded shadow hover:bg-gray-100"
-            >
+            <button className="p-2 bg-white rounded shadow hover:bg-gray-100">
               <FaBell />
             </button>
-            <button className="p-2 bg-white rounded shadow hover:bg-gray-100"
-            >
+            <button className="p-2 bg-white rounded shadow hover:bg-gray-100">
               <FaUserAlt />
             </button>
-            {user?.role === "admin" ||  user.role === "subAdmin" ?(
+            {user?.role === "admin" || user.role === "subAdmin" ? (
               <button
                 className="p-2 bg-white rounded shadow hover:bg-gray-100"
                 onClick={() => setShowCreateForm(true)}
@@ -172,38 +166,58 @@ const Sidebar = () => {
             )}
           </div>
 
+          {/* UserSideBar */}
+          <hr />
+          {user.role === "worker" && (
+            <>
+              <div
+                className="flex items-center justify-between text-sm font-medium text-gray-600 cursor-pointer"
+                onClick={() => setShowProjects(!showProjects)}
+              >
+                <span>Projects</span>
+                <div className="flex items-center gap-2">
+                  <FaStar className="text-gray-400" />
+                  <FaChevronDown
+                    className={`transition-transform ${
+                      showProjects ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
+              </div>
+              {showProjects && (
+                <div className="mt-2 text-gray-400 italic text-sm px-2">
+                  No projects yet
+                </div>
+              )}
 
-            {user.role !== "admin" || "subAdmin" ?(
-              <>
-              
-              </>
-            ) : (
-          <>
-          
-          <div
-            className="flex items-center justify-between text-sm font-medium text-gray-600 cursor-pointer"
-            onClick={() => setShowProjects(!showProjects)}
-          >
-            <span>Projects</span>
-            <div className="flex items-center gap-2">
-              <FaStar className="text-gray-400" />
-              <FaChevronDown className={`transition-transform ${showProjects ? "rotate-180" : ""}`} />
-            </div>
-          </div>
-          {showProjects && (
-            <div className="mt-2 text-gray-400 italic text-sm px-2">No projects yet</div>
+              <div className="mt-6">
+                <div className="text-sm font-medium text-gray-600 mb-2 cursor-pointer flex justify-between items-center">
+                  <span>My Dashboard</span>
+                </div>
+                <div className="ml-4 flex flex-col gap-2 text-sm text-gray-700">
+                  <button
+                    className="text-left px-2 py-1 rounded hover:bg-gray-100"
+                    onClick={() => navigate("/my-tasks")}
+                  >
+                    My Tasks
+                  </button>
+                  <button
+                    className="text-left px-2 py-1 rounded hover:bg-gray-100"
+                    onClick={() => navigate("/task-status")}
+                  >
+                    Task Status
+                  </button>
+                  <button
+                    className="text-left px-2 py-1 rounded hover:bg-gray-100"
+                    onClick={() => navigate("/report-issue")}
+                  >
+                    Report Issue
+                  </button>
+                </div>
+              </div>
+            </>
           )}
 
-          
-          </>
-          
-
-            )
-            
-
-            }
-
-          
           {/* Manage Users (Admin Only) */}
           {user?.role === "admin" && (
             <div className="mt-6">
@@ -213,46 +227,47 @@ const Sidebar = () => {
               >
                 <span>Manage Worker</span>
                 <FaChevronDown
-                  className={`transition-transform duration-200 ${showUserManager ? "rotate-180" : ""}`}
+                  className={`transition-transform duration-200 ${
+                    showUserManager ? "rotate-180" : ""
+                  }`}
                 />
               </div>
 
               {showUserManager && (
                 <div className="ml-4 flex flex-col gap-2 text-sm text-gray-700">
-                                      <button
+                  <button
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
-                    onClick={() => navigate("/register")}>
+                    onClick={() => navigate("/register")}
+                  >
                     Register worker
                   </button>
-                    <button
+                  <button
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
-                    onClick={() => navigate("/remove-worker")}>
-                      Remove worker
+                    onClick={() => navigate("/remove-worker")}
+                  >
+                    Remove worker
                   </button>
                   <button
                     onClick={() => navigate("/subadmin-manager")}
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
                   >
                     Manage Worker
-                  </button >
-                    <button
+                  </button>
+                  <button
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
-                    onClick={() => navigate("/reporting-analysis")}>
+                    onClick={() => navigate("/reporting-analysis")}
+                  >
                     Reporting & Analytics
-                  </button>  
-                    <button
+                  </button>
+                  <button
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
-                    onClick={() => navigate("/task-status")}>
-                  </button>  
-
-                  
-                  
+                    onClick={() => navigate("/task-status")}
+                  ></button>
                 </div>
               )}
             </div>
           )}
 
-          <hr />
           {user?.role === "admin" && (
             <div className="mt-6">
               <div
@@ -261,50 +276,54 @@ const Sidebar = () => {
               >
                 <span>Manage Task</span>
                 <FaChevronDown
-                  className={`transition-transform duration-200 ${showTaskManager ? "rotate-180" : ""}`}
+                  className={`transition-transform duration-200 ${
+                    showTaskManager ? "rotate-180" : ""
+                  }`}
                 />
               </div>
 
               {showTaskManager && (
                 <div className="ml-4 flex flex-col gap-2 text-sm text-gray-700">
-                                      <button
+                  <button
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
-                    onClick={() => setShowCreateForm(true)}>
+                    onClick={() => setShowCreateForm(true)}
+                  >
                     create Task
                   </button>
-                    <button
+                  <button
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
-                    onClick={() => {setShowDeleteForm(true)
+                    onClick={() => {
+                      setShowDeleteForm(true);
 
-                      navigate("/remove-task")
-                    }}>
-                      Remove Task 
+                      navigate("/remove-task");
+                    }}
+                  >
+                    Remove Task
                   </button>
                   <button
                     onClick={() => navigate(`/task-progress`)}
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
                   >
-                   Task Progress
-                  </button >
-                    <button
+                    Task Progress
+                  </button>
+                  <button
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
-                    onClick={() => navigate("/task-status")}>
+                    onClick={() => navigate("/task-status")}
+                  >
                     Task Stats
-                  </button>  
-                    <button
+                  </button>
+                  <button
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
-                    onClick={() => navigate("/task-status")}>
-                  </button>  
+                    onClick={() => navigate("/task-status")}
+                  ></button>
 
                   {/*  */}
-                  
                 </div>
               )}
             </div>
           )}
         </div>
       </div>
-
 
       <AnimatePresence>
         {showCreateForm && (
@@ -332,7 +351,7 @@ const Sidebar = () => {
             <RemoveTask onClose={() => setShowDeleteForm(false)} />
           </motion.div>
         )}
-      </AnimatePresence> 
+      </AnimatePresence>
 
       {/* {/* Add Delete  form here  */}
     </>

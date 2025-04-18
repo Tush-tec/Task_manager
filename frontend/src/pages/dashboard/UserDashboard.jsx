@@ -45,7 +45,7 @@ const UserDashboard = () => {
             </p>
           ) : (
             <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {task.map((t) => (
+              { Array.isArray(task) &&task?.map((t) => (
                 <Link key={t._id} to={`${t._id}`}>
                   <div className="bg-white dark:bg-zinc-700 bg-opacity-60 dark:bg-opacity-80 backdrop-filter backdrop-blur-lg shadow rounded-xl p-6 hover:shadow-xl transition-all">
                     <div className="w-full sm:w-[90%] md:w-3/4 lg:w- p-4 border rounded-2xl bg-gray-900 shadow-md mx-auto">
