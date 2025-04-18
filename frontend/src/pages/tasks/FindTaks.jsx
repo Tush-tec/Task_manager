@@ -10,8 +10,15 @@ const FindTask = () => {
   const { getTaskByIdForUser, task, updateStatusForTask } = useTask()
 
   useEffect(() => {
-    getTaskByIdForUser(taskId)
-  }, [taskId])
+    const timeout = setTimeout(() => {
+      if (taskId) {
+        getTaskByIdForUser(taskId);
+      }
+    }, 200); // delay to wait for token/context
+  
+    return () => clearTimeout(timeout);
+  }, [taskId]);
+  
 
   const handleStatusChange = (e) => {
 

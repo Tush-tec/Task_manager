@@ -36,10 +36,10 @@ const PrivateRoutes = () => {
     <Route path = '/get-task' element={<TaskDetails/> } />
     <Route  path='/sidebar' element={<Sidebar/>}/>
     <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
-    <Route path="/task/:taskId" element={<ViewTask />} />
+    {/* <Route path="/task/:taskId" element={<ViewTask />} /> */}
 
-    <Route path='/user' element={<UserDashboard/>}/>
-    <Route path='/user/:taskId' element={<FindTaks/>}/>
+    <Route path='/my-tasks' element={<UserDashboard/>}/>
+    <Route path='/task/:taskId' element={<FindTaks/>}/>
 
     <Route path='/subadmin-manager' element={<SubAdminManager/>}/>
 

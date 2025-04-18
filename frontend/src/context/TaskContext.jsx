@@ -67,7 +67,7 @@
       const getTask = async () => {
         setIsLoading(true)
         await requestHandler(
-         await  getAllTask,
+          getAllTask,
           setIsLoading,
           (res) => {                
             setTaskList(res.task)
@@ -84,7 +84,7 @@
         setIsLoading(true)
 
         await requestHandler(
-         async  () => await getTaskById (taskId),
+         async  () => await getTaskById(taskId),
           setIsLoading,
           (res) => {
             setTask(res.data)
