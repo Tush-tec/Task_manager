@@ -262,7 +262,6 @@ const getTaskForWorker = async (req, res) => {
         data: [],
       });
     }
-    console.log("task", tasks);
     
 
     return res.status(200).json({
