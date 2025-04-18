@@ -141,6 +141,7 @@ const Sidebar = () => {
                 </svg>
               </button>
             </div>
+          
           )}
 
 
@@ -250,6 +251,8 @@ const Sidebar = () => {
               )}
             </div>
           )}
+
+          <hr />
           {user?.role === "admin" && (
             <div className="mt-6">
               <div
