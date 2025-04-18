@@ -8,6 +8,7 @@ import {
   FaBell,
   FaStar,
   FaChevronDown,
+  FaUserAlt,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -24,14 +25,16 @@ const Sidebar = () => {
 
   const { task } = useTask();
 
-  // const { getSubAdmin } = useSubAdmin();
 
+  
   const [showDropdown, setShowDropdown] = useState(false);
   const [showProjects, setShowProjects] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [ShowDeleteForm, setShowDeleteForm] =   useState(false)
   const [showUserManager, setShowUserManager] = useState(false);
   const [showTaskManager, setTaskManager] = useState(false )
+  const [searchQuery, setIsSearchQuery]  = useState("")
+  const [searchQueryResult, setIsSearchQueryResult]  = useState([]) 
   
 
   const dropdownRef = useRef(null);
@@ -40,7 +43,21 @@ const Sidebar = () => {
 
  
 
+  useEffect(()=>{
+    
+    if(searchQuery.trim() === "") {
+      setIsSearchQueryResult([])
+      return
+    }
 
+    const makeLowerQuery = searchQuery.trim().toLowerCase()
+
+    const queryResult = task?.filter(
+      (t) => {
+        t.name.toLowerCase().includes(makeLowerQuery)
+      }
+    )
+  }, [searchQuery, task])
 
 
   useEffect(() => {
@@ -128,8 +145,17 @@ const Sidebar = () => {
 
 
           <div className="flex items-center justify-between mb-4 px-1">
-            <button className="p-2 bg-white rounded shadow hover:bg-gray-100">
+            <button className="p-2 bg-white rounded shadow hover:bg-gray-100"
+            >
               <FaSearch />
+            </button>
+            <button className="p-2 bg-white rounded shadow hover:bg-gray-100"
+            >
+              <FaBell />
+            </button>
+            <button className="p-2 bg-white rounded shadow hover:bg-gray-100"
+            >
+              <FaUserAlt />
             </button>
             {user?.role === "admin" ||  user.role === "subAdmin" ?(
               <button
