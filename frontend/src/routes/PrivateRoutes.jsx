@@ -46,6 +46,7 @@ const PrivateRoutes = () => {
     <Route path='/remove-task'  element={<RemoveTask/>}/>
     <Route path='/remove-worker'  element={<RemoveWorker/>}/>
     <Route path='/task-progress' element={<ProgressTask/>}/>
+    <Route path='/reporting-analysis' element={<ProgressTask/>}/>
     
     <Route path= '/task-progress/task/:workerId' element={<TaskProgress/>}/>
     <Route path="/task-progress/task-filter/:workerId" element={<QueryTask />} />

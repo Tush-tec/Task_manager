@@ -210,7 +210,7 @@ const Sidebar = () => {
                   </button >
                     <button
                     className="text-left px-2 py-1 rounded hover:bg-gray-100"
-                    onClick={() => navigate("/task-status")}>
+                    onClick={() => navigate("/reporting-analysis")}>
                     Reporting & Analytics
                   </button>  
                     <button
