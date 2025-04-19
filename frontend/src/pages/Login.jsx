@@ -1,22 +1,33 @@
 // imports
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LockClosedIcon, ArrowRightCircleIcon } from "@heroicons/react/20/solid";
 import { useAuth } from "../context/AuthContext";
 
 import { FcGoogle } from "react-icons/fc"; // Google Icon
 import Input from "../Component/Input";
 import Button from "../Component/Button";
+import { useNavigate } from "react-router-dom";
 
 
 
 const Login = () => {
   const [userLogin, setUserLogin] = useState({ username: "", email: "", password: "" });
   const { login, error } = useAuth();
+  const navigate = useNavigate()
+
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setUserLogin((prev) => ({ ...prev, [name]: value }));
   };
+
+  const { isAuthenticate } = useAuth()
+
+  useEffect(() => {
+    if (isAuthenticate) {
+      navigate('/')
+    }
+  }, [isAuthenticate])
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Routes, Route, Router} from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
 import Home from '../pages/Home'
@@ -17,45 +17,61 @@ import RemoveTask from '../pages/tasks/RemoveTask'
 import RemoveWorker from '../pages/RemoveWorker'
 import ProgressTask from '../pages/tasks/ProgressTask'
 import TaskProgress from '../pages/tasks/TaskProgress'
-
 import QueryTask from '../pages/tasks/QueryTask'
-
+import ProtectedRoute from './ProtectedRoute'
 const PrivateRoutes = () => {
   return (
+    <Routes>
+\      <Route path="/" element={<Home />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/google/success" element={<GoogleSuccess />} />
 
-    <>
 
-   <Routes>
+      <Route path="/dashboard" element={
+        <ProtectedRoute><Dashboard /></ProtectedRoute>
+      } />
+      <Route path="/create-task" element={
+        <ProtectedRoute><CreateTask /></ProtectedRoute>
+      } />
+      <Route path="/get-task" element={
+        <ProtectedRoute><TaskDetails /></ProtectedRoute>
+      } />
+      <Route path="/sidebar" element={
+        <ProtectedRoute><Sidebar /></ProtectedRoute>
+      } />
+      <Route path="/admin-dashboard" element={
+        <ProtectedRoute><AdminDashboard /></ProtectedRoute>
+      } />
+      <Route path="/my-task/task/:taskId" element={
+        <ProtectedRoute><ViewTask /></ProtectedRoute>
+      } />
+      <Route path="/my-tasks" element={
+        <ProtectedRoute><UserDashboard /></ProtectedRoute>
+      } />
+      <Route path="/task/:taskId" element={
+        <ProtectedRoute><FindTaks /></ProtectedRoute>
+      } />
+      <Route path="/subadmin-manager" element={
+        <ProtectedRoute><SubAdminManager /></ProtectedRoute>
+      } />
+      <Route path="/remove-task" element={
+        <ProtectedRoute><RemoveTask /></ProtectedRoute>
+      } />
+      <Route path="/remove-worker" element={
+        <ProtectedRoute><RemoveWorker /></ProtectedRoute>
+      } />
+      <Route path="/task-progress" element={
+        <ProtectedRoute><ProgressTask /></ProtectedRoute>
+      } />
+      <Route path="/task-progress/task/:workerId" element={
+        <ProtectedRoute><TaskProgress /></ProtectedRoute>
+      } />
+      <Route path="/task-progress/task-filter/:workerId" element={
+        <ProtectedRoute><QueryTask /></ProtectedRoute>
+      } />
+    </Routes>
+  );
+};
 
-    <Route path='/register' element={<Register/>}/>
-    <Route path='/dashboard' element = {<Dashboard/>}/>
-    <Route path='/' element={<Home/>}/>
-    <Route path="/google/success" element={<GoogleSuccess />} />
-    <Route path='/login' element={<Login/>} />
-    <Route path = '/create-task' element={<CreateTask/>}/>
-    <Route path = '/get-task' element={<TaskDetails/> } />
-    <Route  path='/sidebar' element={<Sidebar/>}/>
-    <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
-    {/* <Route path="/task/:taskId" element={<ViewTask />} /> */}
-
-    <Route path='/my-tasks' element={<UserDashboard/>}/>
-    <Route path='/task/:taskId' element={<FindTaks/>}/>
-
-    <Route path='/subadmin-manager' element={<SubAdminManager/>}/>
-
-    <Route path='/remove-task'  element={<RemoveTask/>}/>
-    <Route path='/remove-worker'  element={<RemoveWorker/>}/>
-    <Route path='/task-progress' element={<ProgressTask/>}/>
-    
-    <Route path= '/task-progress/task/:workerId' element={<TaskProgress/>}/>
-    <Route path="/task-progress/task-filter/:workerId" element={<QueryTask />} />
-
-        
-    </Routes>    
-
-    </>
-
-)
-}
-
-export default PrivateRoutes
+export default PrivateRoutes;
