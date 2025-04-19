@@ -283,7 +283,6 @@ const getTaskForWorker = async (req, res) => {
 const getTaskById = async (req, res) => {
   try {
     const { taskId } = req.params;
-    console.log("Task Id", taskId);
     
 
     if (!isValidObjectId(taskId)) {
